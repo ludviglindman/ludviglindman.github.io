@@ -104,6 +104,7 @@
     <p class="sub">Current holdings and closed trades. Not investment advice.</p>
     <div class="meta-row">
       <span>Updated&nbsp;<b id="updated">—</b></span>
+      <span>Portfolio value&nbsp;<b id="portval">—</b></span>
       <span>Open positions&nbsp;<b id="poscount">—</b></span>
       <span>Currency&nbsp;<b id="ccy">—</b></span>
     </div>
@@ -294,6 +295,10 @@ function renderPositions(data){
   document.getElementById("owner").textContent  =data.owner||"Ludvig";
   document.getElementById("updated").textContent=data.updated||"—";
   document.getElementById("ccy").textContent    =data.currency||"—";
+  const pv = data.portfolio_value;
+  document.getElementById("portval").textContent = pv
+    ? new Intl.NumberFormat("sv-SE",{maximumFractionDigits:0}).format(pv)+" "+(data.currency||"")
+    : "—";
   const list=(data.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
   document.getElementById("poscount").textContent=list.length;
   const maxW=Math.max(...list.map(p=>p.weight_pct||0),1);

@@ -5,8 +5,9 @@ transactions. It reads two data files: `positions.json` and `transactions.json`.
 
 ## When I say "update portfolio" (or "uppdatera portföljen"), do this:
 
-1. **Positions** — Use the **Montrose MCP** to fetch my current holdings. For each
+1. **Positions** — Use the **Montrose MCP** to fetch my current holdings and total portfolio value. For each
    holding, write: ticker, company name, unrealised return (%), and weight (% of book).
+   Also write the total portfolio value as `portfolio_value` (integer, in SEK).
    Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
 
 2. **Transactions** — The Montrose MCP can NOT fetch trade history, so I export it
@@ -28,6 +29,7 @@ Always show me the diff of the JSON files before pushing.
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
   "updated": "YYYY-MM-DD",
   "currency": "SEK",
+  "portfolio_value": 572462,
   "positions": [
     { "ticker": "INVE B", "name": "Investor B", "return_pct": 22.02, "weight_pct": 32.5 }
   ]
