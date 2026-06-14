@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Portfolio — Holdings &amp; Transactions</title>
+<title>Portfolio — Ludvig</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,132 +15,100 @@
     --hairline:#DAD7CE;
     --hairline-strong:#C3BFB4;
     --gain:#1B6B4C;
+    --gain-bg:#EAF4EF;
     --loss:#A0392A;
-    --accent:#16181C;
-    --shadow:rgba(22,24,28,.06);
+    --loss-bg:#F8EDEB;
   }
   *{box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:"IBM Plex Sans",system-ui,sans-serif;
-    font-size:16px;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:880px;margin:0 auto;padding:0 24px 96px;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px 96px;}
 
-  /* ---- Header ---- */
-  header.site{padding:56px 0 28px;border-bottom:2px solid var(--ink);}
-  .eyebrow{
-    font-family:"IBM Plex Mono",monospace;
-    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--ink-soft);margin:0 0 14px;
-  }
-  h1.name{
-    font-family:"IBM Plex Serif",serif;
-    font-weight:600;font-size:clamp(32px,6vw,48px);
-    line-height:1.05;margin:0;letter-spacing:-.01em;
-  }
-  .sub{margin:10px 0 0;color:var(--ink-soft);font-size:15px;max-width:46ch;}
-  .meta-row{
-    display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:24px;
-    font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-soft);
-  }
+  /* Header */
+  header.site{padding:52px 0 24px;border-bottom:2px solid var(--ink);}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 12px;}
+  h1.name{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0;letter-spacing:-.01em;}
+  .sub{margin:8px 0 0;color:var(--ink-soft);font-size:14.5px;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:20px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
   .meta-row b{color:var(--ink);font-weight:500;}
 
-  /* ---- Section heads ---- */
-  .section{margin-top:52px;}
-  .section-head{
-    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-    padding-bottom:10px;border-bottom:1px solid var(--hairline-strong);
-  }
-  .section-head h2{
-    font-family:"IBM Plex Serif",serif;font-weight:500;
-    font-size:20px;margin:0;letter-spacing:-.01em;
-  }
-  .section-head .count{
-    font-family:"IBM Plex Mono",monospace;font-size:12px;
-    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
-  }
+  /* Stats band */
+  .stats-band{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline-strong);border:1px solid var(--hairline-strong);margin-top:40px;}
+  .stat{background:var(--paper);padding:20px 18px;}
+  .stat .sl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
+  .stat .sv{font-family:"IBM Plex Serif",serif;font-size:clamp(22px,3.5vw,28px);font-weight:600;line-height:1;}
+  .stat .sv.up{color:var(--gain);}
+  .stat .sv.down{color:var(--loss);}
+  .stat .sh{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
 
-  /* ---- Positions ledger ---- */
-  .ledger{margin-top:4px;}
-  .pos{
-    display:grid;
-    grid-template-columns:84px 1fr 150px 96px;
-    align-items:center;gap:16px;
-    padding:16px 0;border-bottom:1px solid var(--hairline);
-    opacity:0;transform:translateY(6px);
-    animation:rise .5s ease forwards;
+  /* Section */
+  .section{margin-top:48px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--hairline-strong);}
+  .section-head h2{font-family:"IBM Plex Serif",serif;font-weight:500;font-size:19px;margin:0;letter-spacing:-.01em;}
+  .section-head .count{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+
+  /* Closed positions */
+  .closed-row{
+    display:grid;grid-template-columns:80px 1fr 110px 90px 90px;
+    align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);
+    opacity:0;transform:translateY(5px);animation:rise .45s ease forwards;
   }
-  .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15px;letter-spacing:.02em;}
-  .pos .nm{color:var(--ink-soft);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .closed-row .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;}
+  .closed-row .nm{color:var(--ink-soft);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .closed-row .period{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);}
+  .closed-row .rpct{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;}
+  .closed-row .rkr{font-family:"IBM Plex Mono",monospace;font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft);}
+  .up{color:var(--gain);}
+  .down{color:var(--loss);}
+
+  /* Open positions */
+  .pos{
+    display:grid;grid-template-columns:80px 1fr 150px 90px;
+    align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);
+    opacity:0;transform:translateY(5px);animation:rise .45s ease forwards;
+  }
+  .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;}
+  .pos .nm{color:var(--ink-soft);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .weight{display:flex;flex-direction:column;gap:5px;}
-  .weight .wlabel{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);}
+  .weight .wlabel{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);}
   .bar{height:3px;background:var(--hairline);border-radius:2px;overflow:hidden;}
   .bar i{display:block;height:100%;background:var(--ink);}
-  .ret{
-    font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:16px;
-    text-align:right;font-variant-numeric:tabular-nums;
-  }
-  .ret.up{color:var(--gain);}
-  .ret.down{color:var(--loss);}
+  .ret{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;}
 
-  /* ---- Transactions ledger ---- */
+  /* Transactions */
   .tx{
-    display:grid;
-    grid-template-columns:104px 70px 1fr 120px;
-    align-items:baseline;gap:16px;
-    padding:14px 0;border-bottom:1px solid var(--hairline);
-    font-size:14.5px;
-    opacity:0;transform:translateY(6px);
-    animation:rise .5s ease forwards;
+    display:grid;grid-template-columns:100px 64px 1fr 130px;
+    align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid var(--hairline);
+    font-size:14px;opacity:0;transform:translateY(5px);animation:rise .45s ease forwards;
   }
-  .tx .date{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink-soft);}
-  .tx .side{
-    font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
-    letter-spacing:.08em;text-transform:uppercase;
-  }
+  .tx .date{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-soft);}
+  .tx .side{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
   .tx .side.buy{color:var(--gain);}
   .tx .side.sell{color:var(--loss);}
-  .tx .what .t{font-family:"IBM Plex Mono",monospace;font-weight:600;}
-  .tx .what .n{color:var(--ink-soft);font-size:13px;}
-  .tx .amt{
-    font-family:"IBM Plex Mono",monospace;text-align:right;
-    font-variant-numeric:tabular-nums;color:var(--ink);
-  }
+  .tx .what .t{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:13.5px;}
+  .tx .what .n{color:var(--ink-soft);font-size:12.5px;}
+  .tx .amt{font-family:"IBM Plex Mono",monospace;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;}
   .tx .amt small{color:var(--ink-soft);}
 
-  /* ---- Footer ---- */
-  footer.site{
-    margin-top:64px;padding-top:20px;border-top:1px solid var(--hairline);
-    font-size:12.5px;color:var(--ink-soft);line-height:1.6;
-  }
-  footer.site a{color:var(--ink);}
+  /* Footer */
+  footer.site{margin-top:60px;padding-top:18px;border-top:1px solid var(--hairline);font-size:12px;color:var(--ink-soft);line-height:1.7;}
 
-  .empty{padding:28px 0;color:var(--ink-soft);font-size:14px;}
-
+  .empty{padding:24px 0;color:var(--ink-soft);font-size:14px;}
   @keyframes rise{to{opacity:1;transform:none;}}
-  @media (prefers-reduced-motion:reduce){
-    .pos,.tx{animation:none;opacity:1;transform:none;}
-  }
+  @media(prefers-reduced-motion:reduce){.pos,.tx,.closed-row{animation:none;opacity:1;transform:none;}}
 
-  /* ---- Mobile ---- */
-  @media (max-width:620px){
-    .wrap{padding:0 18px 72px;}
-    .pos{grid-template-columns:1fr auto;grid-template-areas:"tk ret" "nm ret" "wt wt";row-gap:8px;}
-    .pos .tk{grid-area:tk;}
-    .pos .nm{grid-area:nm;}
-    .pos .weight{grid-area:wt;}
-    .pos .ret{grid-area:ret;align-self:center;}
-    .tx{grid-template-columns:1fr auto;grid-template-areas:"side amt" "what amt" "date date";row-gap:6px;}
-    .tx .side{grid-area:side;}
-    .tx .what{grid-area:what;}
-    .tx .amt{grid-area:amt;align-self:center;}
-    .tx .date{grid-area:date;}
+  @media(max-width:640px){
+    .stats-band{grid-template-columns:repeat(2,1fr);}
+    .closed-row{grid-template-columns:1fr auto;grid-template-areas:"tk rpct" "nm rkr" "period period";row-gap:5px;}
+    .closed-row .tk{grid-area:tk;}
+    .closed-row .nm{grid-area:nm;}
+    .closed-row .period{grid-area:period;}
+    .closed-row .rpct{grid-area:rpct;align-self:center;}
+    .closed-row .rkr{grid-area:rkr;align-self:start;}
+    .pos{grid-template-columns:1fr auto;grid-template-areas:"tk ret" "nm ret" "wt wt";row-gap:6px;}
+    .pos .tk{grid-area:tk;}.pos .nm{grid-area:nm;}.pos .weight{grid-area:wt;}.pos .ret{grid-area:ret;align-self:center;}
+    .tx{grid-template-columns:1fr auto;grid-template-areas:"side amt" "what amt" "date date";row-gap:5px;}
+    .tx .side{grid-area:side;}.tx .what{grid-area:what;}.tx .amt{grid-area:amt;align-self:center;}.tx .date{grid-area:date;}
   }
 </style>
 </head>
@@ -150,90 +118,211 @@
   <header class="site">
     <p class="eyebrow">Equity research · Personal book</p>
     <h1 class="name" id="owner">Ludvig</h1>
-    <p class="sub" id="tagline">Current holdings and recent transactions, updated by hand. Not investment advice.</p>
+    <p class="sub">Current holdings and closed trades. Not investment advice.</p>
     <div class="meta-row">
       <span>Updated&nbsp;<b id="updated">—</b></span>
-      <span>Positions&nbsp;<b id="poscount">—</b></span>
+      <span>Open positions&nbsp;<b id="poscount">—</b></span>
       <span>Currency&nbsp;<b id="ccy">—</b></span>
     </div>
   </header>
+
+  <!-- Stats band (computed from transactions) -->
+  <div class="stats-band">
+    <div class="stat">
+      <div class="sl">Closed trades</div>
+      <div class="sv" id="st-closed">—</div>
+      <div class="sh" id="st-closed-sub"></div>
+    </div>
+    <div class="stat">
+      <div class="sl">Realised P&amp;L</div>
+      <div class="sv" id="st-pnl">—</div>
+      <div class="sh" id="st-pnl-sub"></div>
+    </div>
+    <div class="stat">
+      <div class="sl">Avg return</div>
+      <div class="sv" id="st-avg">—</div>
+      <div class="sh">per closed trade</div>
+    </div>
+    <div class="stat">
+      <div class="sl">Win rate</div>
+      <div class="sv" id="st-win">—</div>
+      <div class="sh" id="st-win-sub"></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Closed positions</h2>
+      <span class="count">Realised return</span>
+    </div>
+    <div id="closed-list"></div>
+  </section>
 
   <section class="section">
     <div class="section-head">
       <h2>Current positions</h2>
       <span class="count">Unrealised return · weight</span>
     </div>
-    <div class="ledger" id="positions"></div>
+    <div id="positions"></div>
   </section>
 
   <section class="section">
     <div class="section-head">
-      <h2>Recent transactions</h2>
+      <h2>All transactions</h2>
       <span class="count">Buy / Sell</span>
     </div>
-    <div class="ledger" id="transactions"></div>
+    <div id="transactions"></div>
   </section>
 
   <footer class="site">
-    For transparency and discussion only — nothing here is a recommendation or
-    investment advice. Figures are self-reported and may lag the market.
+    For transparency and discussion only — nothing here is a recommendation or investment advice.
+    Figures are self-reported. Realised P&amp;L is calculated on a FIFO basis from transaction data and may not match broker statements exactly.
     Built with Claude &amp; the Montrose MCP.
   </footer>
 
 </div>
-
 <script>
-// ---- Fallback sample data (used when the JSON files aren't found, e.g. in preview) ----
-const SAMPLE_POSITIONS = {
+// ── Fallback data ──────────────────────────────────────────────────────────────
+const SAMPLE_POS = {
   updated:"2026-06-14", currency:"SEK",
   positions:[
-    {ticker:"INVE B", name:"Investor B",       return_pct:22.02, weight_pct:32.5},
-    {ticker:"GOOG",   name:"Alphabet C",       return_pct:27.74, weight_pct:10.1},
-    {ticker:"MSFT",   name:"Microsoft",        return_pct:-0.68, weight_pct:9.8},
-    {ticker:"CRED A", name:"Creades A",        return_pct:9.85,  weight_pct:4.7},
-    {ticker:"LUND B", name:"Lundbergföretagen B", return_pct:5.24, weight_pct:4.7},
-    {ticker:"BURE",   name:"Bure Equity",      return_pct:1.32,  weight_pct:4.6}
+    {ticker:"QSYS", name:"Qualisys Holding",   return_pct:9.78,  weight_pct:57.97},
+    {ticker:"NBIS", name:"Nebius Group",        return_pct:11.21, weight_pct:26.32},
+    {ticker:"MRVL", name:"Marvell Technology",  return_pct:4.31,  weight_pct:9.74},
+    {ticker:"AVGO", name:"Broadcom",            return_pct:-1.19, weight_pct:5.98}
   ]
 };
-const SAMPLE_TX = {
-  transactions:[
-    {date:"2026-06-11", ticker:"INVE B", name:"Investor B",  side:"buy",  shares:40, price:312.40, currency:"SEK"},
-    {date:"2026-06-04", ticker:"BURE",   name:"Bure Equity", side:"buy",  shares:50, price:198.10, currency:"SEK"},
-    {date:"2026-05-22", ticker:"MSFT",   name:"Microsoft",   side:"sell", shares:8,  price:441.00, currency:"USD"},
-    {date:"2026-05-09", ticker:"GOOG",   name:"Alphabet C",  side:"buy",  shares:6,  price:171.30, currency:"USD"}
-  ]
-};
+const SAMPLE_TX = {transactions:[
+  {date:"2026-01-15",ticker:"INVE B",name:"Investor B",  side:"buy", shares:100,price:265.00,currency:"SEK"},
+  {date:"2026-02-20",ticker:"INVE B",name:"Investor B",  side:"sell",shares:100,price:312.40,currency:"SEK"},
+  {date:"2026-03-01",ticker:"GOOG",  name:"Alphabet C",  side:"buy", shares:6,  price:171.30,currency:"USD"},
+  {date:"2026-04-10",ticker:"GOOG",  name:"Alphabet C",  side:"sell",shares:6,  price:152.00,currency:"USD"},
+  {date:"2026-05-01",ticker:"QSYS",  name:"Qualisys",    side:"buy", shares:200,price:48.50, currency:"SEK"},
+  {date:"2026-05-10",ticker:"NBIS",  name:"Nebius Group",side:"buy", shares:80, price:28.20, currency:"USD"},
+  {date:"2026-06-01",ticker:"MRVL",  name:"Marvell",     side:"buy", shares:30, price:91.00, currency:"USD"},
+  {date:"2026-06-05",ticker:"AVGO",  name:"Broadcom",    side:"buy", shares:4,  price:240.00,currency:"USD"}
+]};
 
-const fmtPct = n => (n>0?"+":"") + n.toFixed(2) + "%";
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmtPct = n => (n>=0?"+":"")+n.toFixed(2)+"%";
 const fmtNum = n => new Intl.NumberFormat("sv-SE",{maximumFractionDigits:2}).format(n);
+const fmtKr  = n => (n>=0?"+":"")+fmtNum(Math.round(n));
 
-async function load(file, fallback){
-  try{
-    const r = await fetch(file, {cache:"no-store"});
-    if(!r.ok) throw new Error(r.status);
-    return await r.json();
-  }catch(e){
-    return fallback;
-  }
+async function load(file,fallback){
+  try{const r=await fetch(file,{cache:"no-store"});if(!r.ok)throw 0;return await r.json();}
+  catch{return fallback;}
 }
 
+// ── FIFO matching: returns array of closed trades ─────────────────────────────
+function computeClosed(txList){
+  // Group buys per ticker as FIFO queue
+  const queues = {};
+  const closed = [];
+  const sorted = [...txList].sort((a,b)=>a.date.localeCompare(b.date));
+
+  for(const t of sorted){
+    const tk = t.ticker;
+    if(!queues[tk]) queues[tk]=[];
+
+    if((t.side||"").toLowerCase()==="buy"){
+      queues[tk].push({date:t.date, shares:t.shares, price:t.price, name:t.name, currency:t.currency});
+    } else {
+      // sell — match against oldest buys
+      let remaining = t.shares;
+      while(remaining > 0 && queues[tk].length){
+        const lot = queues[tk][0];
+        const matched = Math.min(lot.shares, remaining);
+        const costBasis = matched * lot.price;
+        const proceeds  = matched * t.price;
+        const pnlAbs    = proceeds - costBasis;
+        const pnlPct    = (pnlAbs / costBasis) * 100;
+
+        closed.push({
+          ticker: tk,
+          name: lot.name || t.name,
+          buyDate: lot.date,
+          sellDate: t.date,
+          shares: matched,
+          buyPrice: lot.price,
+          sellPrice: t.price,
+          pnlAbs,
+          pnlPct,
+          currency: t.currency || lot.currency
+        });
+
+        lot.shares -= matched;
+        remaining  -= matched;
+        if(lot.shares <= 0) queues[tk].shift();
+      }
+    }
+  }
+  return closed;
+}
+
+// ── Render stats band ─────────────────────────────────────────────────────────
+function renderStats(closed){
+  const n = closed.length;
+  document.getElementById("st-closed").textContent = n;
+  document.getElementById("st-closed-sub").textContent = n===1?"1 realised trade":`${n} realised trades`;
+
+  if(!n){
+    ["st-pnl","st-avg","st-win"].forEach(id=>document.getElementById(id).textContent="—");
+    return;
+  }
+
+  const totalPnl = closed.reduce((s,c)=>s+c.pnlAbs,0);
+  const avgPct   = closed.reduce((s,c)=>s+c.pnlPct,0)/n;
+  const winners  = closed.filter(c=>c.pnlPct>=0).length;
+  const winRate  = (winners/n)*100;
+
+  const pnlEl = document.getElementById("st-pnl");
+  pnlEl.textContent = fmtKr(totalPnl);
+  pnlEl.className = "sv "+(totalPnl>=0?"up":"down");
+  document.getElementById("st-pnl-sub").textContent = "gross, mixed currencies";
+
+  const avgEl = document.getElementById("st-avg");
+  avgEl.textContent = fmtPct(avgPct);
+  avgEl.className = "sv "+(avgPct>=0?"up":"down");
+
+  const winEl = document.getElementById("st-win");
+  winEl.textContent = winRate.toFixed(0)+"%";
+  winEl.className = "sv "+(winRate>=50?"up":"down");
+  document.getElementById("st-win-sub").textContent = `${winners} winners · ${n-winners} losers`;
+}
+
+// ── Render closed positions ───────────────────────────────────────────────────
+function renderClosed(closed){
+  const root = document.getElementById("closed-list");
+  if(!closed.length){root.innerHTML='<p class="empty">No closed positions yet.</p>';return;}
+
+  const sorted = [...closed].sort((a,b)=>b.sellDate.localeCompare(a.sellDate));
+  root.innerHTML = sorted.map((c,i)=>{
+    const up = c.pnlPct >= 0;
+    return `<div class="closed-row" style="animation-delay:${i*40}ms">
+      <span class="tk">${c.ticker}</span>
+      <span class="nm">${c.name}</span>
+      <span class="period">${c.buyDate} → ${c.sellDate}</span>
+      <span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span>
+      <span class="rkr ${up?"up":"down"}">${fmtKr(c.pnlAbs)} ${c.currency||""}</span>
+    </div>`;
+  }).join("");
+}
+
+// ── Render open positions ─────────────────────────────────────────────────────
 function renderPositions(data){
-  document.getElementById("owner").textContent   = data.owner   || "Ludvig";
-  if(data.tagline) document.getElementById("tagline").textContent = data.tagline;
-  document.getElementById("updated").textContent = data.updated  || "—";
-  document.getElementById("ccy").textContent     = data.currency || "—";
+  document.getElementById("owner").textContent  = data.owner  || "Ludvig";
+  document.getElementById("updated").textContent= data.updated|| "—";
+  document.getElementById("ccy").textContent    = data.currency||"—";
 
   const list = (data.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
   document.getElementById("poscount").textContent = list.length;
-
-  const maxW = Math.max(...list.map(p=>p.weight_pct||0), 1);
+  const maxW = Math.max(...list.map(p=>p.weight_pct||0),1);
   const root = document.getElementById("positions");
 
-  if(!list.length){ root.innerHTML = '<p class="empty">No positions to show yet.</p>'; return; }
-
+  if(!list.length){root.innerHTML='<p class="empty">No open positions.</p>';return;}
   root.innerHTML = list.map((p,i)=>{
-    const up = (p.return_pct||0) >= 0;
-    return `<div class="pos" style="animation-delay:${i*45}ms">
+    const up=(p.return_pct||0)>=0;
+    return `<div class="pos" style="animation-delay:${i*40}ms">
       <span class="tk">${p.ticker||""}</span>
       <span class="nm">${p.name||""}</span>
       <span class="weight">
@@ -245,28 +334,33 @@ function renderPositions(data){
   }).join("");
 }
 
+// ── Render all transactions ───────────────────────────────────────────────────
 function renderTransactions(data){
-  const list = (data.transactions||[]).slice()
-    .sort((a,b)=> (b.date||"").localeCompare(a.date||""));
-  const root = document.getElementById("transactions");
-
-  if(!list.length){ root.innerHTML = '<p class="empty">No transactions logged yet.</p>'; return; }
-
-  root.innerHTML = list.map((t,i)=>{
-    const sell = (t.side||"").toLowerCase()==="sell";
-    const ccy = t.currency ? " "+t.currency : "";
-    return `<div class="tx" style="animation-delay:${i*45}ms">
+  const list=[...(data.transactions||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  const root=document.getElementById("transactions");
+  if(!list.length){root.innerHTML='<p class="empty">No transactions yet.</p>';return;}
+  root.innerHTML=list.map((t,i)=>{
+    const sell=(t.side||"").toLowerCase()==="sell";
+    return `<div class="tx" style="animation-delay:${i*30}ms">
       <span class="date">${t.date||""}</span>
       <span class="side ${sell?"sell":"buy"}">${sell?"Sell":"Buy"}</span>
       <span class="what"><span class="t">${t.ticker||""}</span> <span class="n">${t.name||""}</span></span>
-      <span class="amt">${fmtNum(t.shares||0)} <small>× ${fmtNum(t.price||0)}${ccy}</small></span>
+      <span class="amt">${fmtNum(t.shares||0)} <small>× ${fmtNum(t.price||0)} ${t.currency||""}</small></span>
     </div>`;
   }).join("");
 }
 
+// ── Bootstrap ─────────────────────────────────────────────────────────────────
 (async()=>{
-  renderPositions(await load("./positions.json", SAMPLE_POSITIONS));
-  renderTransactions(await load("./transactions.json", SAMPLE_TX));
+  const [posData,txData] = await Promise.all([
+    load("./positions.json", SAMPLE_POS),
+    load("./transactions.json", SAMPLE_TX)
+  ]);
+  const closed = computeClosed(txData.transactions||[]);
+  renderStats(closed);
+  renderClosed(closed);
+  renderPositions(posData);
+  renderTransactions(txData);
 })();
 </script>
 </body>
