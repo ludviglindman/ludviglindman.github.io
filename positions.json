@@ -1,0 +1,14 @@
+{
+  "owner": "Ludvig",
+  "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
+  "updated": "2026-06-14",
+  "currency": "SEK",
+  "positions": [
+    { "ticker": "INVE B", "name": "Investor B",           "return_pct": 22.02, "weight_pct": 32.5 },
+    { "ticker": "GOOG",   "name": "Alphabet C",           "return_pct": 27.74, "weight_pct": 10.1 },
+    { "ticker": "MSFT",   "name": "Microsoft",            "return_pct": -0.68, "weight_pct": 9.8 },
+    { "ticker": "CRED A", "name": "Creades A",            "return_pct": 9.85,  "weight_pct": 4.7 },
+    { "ticker": "LUND B", "name": "Lundbergföretagen B",  "return_pct": 5.24,  "weight_pct": 4.7 },
+    { "ticker": "BURE",   "name": "Bure Equity",          "return_pct": 1.32,  "weight_pct": 4.6 }
+  ]
+}

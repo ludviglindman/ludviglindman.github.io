@@ -1,0 +1,8 @@
+{
+  "transactions": [
+    { "date": "2026-06-11", "ticker": "INVE B", "name": "Investor B",  "side": "buy",  "shares": 40, "price": 312.40, "currency": "SEK" },
+    { "date": "2026-06-04", "ticker": "BURE",   "name": "Bure Equity", "side": "buy",  "shares": 50, "price": 198.10, "currency": "SEK" },
+    { "date": "2026-05-22", "ticker": "MSFT",   "name": "Microsoft",   "side": "sell", "shares": 8,  "price": 441.00, "currency": "USD" },
+    { "date": "2026-05-09", "ticker": "GOOG",   "name": "Alphabet C",  "side": "buy",  "shares": 6,  "price": 171.30, "currency": "USD" }
+  ]
+}
