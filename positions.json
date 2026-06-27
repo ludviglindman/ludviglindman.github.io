@@ -3,6 +3,8 @@
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
   "updated": "2026-06-28",
   "currency": "SEK",
+  "ytd_return_pct": 96.46,
+  "total_return_pct": 124.6,
   "positions": [
     { "ticker": "QSYS",     "name": "Qualisys Holding",   "return_pct": 8.30,  "weight_pct": 69.75 },
     { "ticker": "OCTV SDB", "name": "Octave Intelligence", "return_pct": -0.61, "weight_pct": 30.25 }
