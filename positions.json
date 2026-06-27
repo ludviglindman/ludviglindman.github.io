@@ -1,13 +1,10 @@
 {
   "owner": "Ludvig",
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
-  "updated": "2026-06-14",
+  "updated": "2026-06-28",
   "currency": "SEK",
-  "portfolio_value": 622424,
   "positions": [
-    { "ticker": "QSYS", "name": "Qualisys Holding",  "return_pct": 9.78,  "weight_pct": 58.0  },
-    { "ticker": "NBIS", "name": "Nebius Group",       "return_pct": 11.04, "weight_pct": 26.29 },
-    { "ticker": "MRVL", "name": "Marvell Technology", "return_pct": 4.15,  "weight_pct": 9.73  },
-    { "ticker": "AVGO", "name": "Broadcom",           "return_pct": -1.33, "weight_pct": 5.98  }
+    { "ticker": "QSYS",     "name": "Qualisys Holding",   "return_pct": 8.30,  "weight_pct": 69.75 },
+    { "ticker": "OCTV SDB", "name": "Octave Intelligence", "return_pct": -0.61, "weight_pct": 30.25 }
   ]
 }
