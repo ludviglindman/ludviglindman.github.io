@@ -5,10 +5,13 @@ transactions. It reads two data files: `positions.json` and `transactions.json`.
 
 ## When I say "update portfolio" (or "uppdatera portföljen"), do this:
 
-1. **Positions** — Use the **Montrose MCP** to fetch my current holdings and total portfolio value. For each
-   holding, write: ticker, company name, unrealised return (%), and weight (% of book).
-   Also write the total portfolio value as `portfolio_value` (integer, in SEK).
-   Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
+1. **Positions** — Use the **Montrose MCP** (`get_user_accounts`, then `get_holdings`) to fetch my current
+   holdings. For each holding, write: ticker, company name, unrealised return (%), and weight (% of book).
+   Do NOT write any absolute money amounts. Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
+
+   The Montrose MCP does NOT expose portfolio returns, so I read them from the Montrose app and tell you.
+   If I give you a YTD number, write it as `ytd_return_pct`; if I give you a since-start number, write it as `total_return_pct`.
+   Both are percentages (e.g. 88.10). If I don't mention one, keep whatever value is already in the file.
 
 2. **Transactions** — The Montrose MCP can NOT fetch trade history, so I export it
    manually. If there is a new export file in `./imports/` (CSV or xlsx), parse it,
@@ -29,7 +32,8 @@ Always show me the diff of the JSON files before pushing.
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
   "updated": "YYYY-MM-DD",
   "currency": "SEK",
-  "portfolio_value": 572462,
+  "ytd_return_pct": 88.10,
+  "total_return_pct": 163.20,
   "positions": [
     { "ticker": "INVE B", "name": "Investor B", "return_pct": 22.02, "weight_pct": 32.5 }
   ]

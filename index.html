@@ -3,62 +3,71 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Portfolio — Ludvig</title>
+<title>Ludvig Lindman</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FAFAF7;
-    --ink:#16181C;
-    --ink-soft:#5B5F66;
-    --hairline:#DAD7CE;
-    --hairline-strong:#C3BFB4;
-    --gain:#1B6B4C;
-    --loss:#A0392A;
+    --paper:#FAFAF7; --ink:#16181C; --ink-soft:#5B5F66;
+    --hairline:#DAD7CE; --hairline-strong:#C3BFB4;
+    --gain:#1B6B4C; --loss:#A0392A;
   }
   *{box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:900px;margin:0 auto;padding:0 24px 96px;}
+  a{color:var(--ink);}
 
-  /* Header */
-  header.site{padding:52px 0 24px;border-bottom:2px solid var(--ink);}
-  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 12px;}
-  h1.name{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0;letter-spacing:-.01em;}
-  .sub{margin:8px 0 0;color:var(--ink-soft);font-size:14.5px;}
-  .meta-row{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:20px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
-  .meta-row b{color:var(--ink);font-weight:500;}
+  /* Header / bio */
+  header.site{padding:56px 0 32px;border-bottom:2px solid var(--ink);}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 14px;}
+  h1.name{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:clamp(32px,6vw,50px);line-height:1.04;margin:0;letter-spacing:-.01em;}
+  .bio{margin:18px 0 0;max-width:62ch;font-size:15.5px;color:#33363B;}
+  .links{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;}
+  .links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--hairline-strong);padding-bottom:2px;transition:border-color .15s;}
+  .links a:hover{border-color:var(--ink);}
+  .links span{color:var(--ink-soft);}
 
-  /* Time filter tabs */
-  .filter-bar{display:flex;gap:0;margin-top:36px;border:1px solid var(--hairline-strong);width:fit-content;}
-  .filter-btn{
-    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
-    padding:9px 18px;border:none;background:transparent;color:var(--ink-soft);
-    cursor:pointer;border-right:1px solid var(--hairline-strong);transition:background .15s,color .15s;
-  }
+  /* Section heads */
+  .section{margin-top:54px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--hairline-strong);}
+  .section-head h2{font-family:"IBM Plex Serif",serif;font-weight:500;font-size:20px;margin:0;letter-spacing:-.01em;}
+  .section-head .count{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .section-note{margin:14px 0 0;font-size:13px;color:var(--ink-soft);max-width:64ch;}
+
+  /* Selected work */
+  .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline-strong);border:1px solid var(--hairline-strong);margin-top:20px;}
+  .work-card{background:var(--paper);padding:22px 20px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);transition:background .15s;}
+  .work-card:hover{background:#F2F0EA;}
+  .wc-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .wc-name{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:19px;letter-spacing:-.01em;}
+  .wc-ticker{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
+  .wc-ctx{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .wc-call{font-family:"IBM Plex Mono",monospace;font-size:13px;}
+  .wc-call b{font-weight:600;}
+  .wc-call .up{color:var(--gain);font-weight:600;}
+  .wc-thesis{font-size:13.5px;color:#33363B;line-height:1.5;}
+  .wc-link{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);margin-top:auto;padding-top:4px;}
+  .work-card:hover .wc-link{color:var(--ink);}
+
+  /* Portfolio */
+  .filter-bar{display:flex;margin-top:20px;border:1px solid var(--hairline-strong);width:fit-content;}
+  .filter-btn{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:9px 18px;border:none;background:transparent;color:var(--ink-soft);cursor:pointer;border-right:1px solid var(--hairline-strong);transition:background .15s,color .15s;}
   .filter-btn:last-child{border-right:none;}
   .filter-btn:hover{background:var(--hairline);color:var(--ink);}
   .filter-btn.active{background:var(--ink);color:var(--paper);}
 
-  /* Stats band */
   .stats-band{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline-strong);border:1px solid var(--hairline-strong);margin-top:16px;}
-  .stat{background:var(--paper);padding:20px 18px;}
+  .stat{background:var(--paper);padding:18px;}
   .stat .sl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
   .stat .sv{font-family:"IBM Plex Serif",serif;font-size:clamp(20px,3.2vw,26px);font-weight:600;line-height:1;}
-  .stat .sv.up{color:var(--gain);}
-  .stat .sv.down{color:var(--loss);}
+  .stat .sv.up{color:var(--gain);} .stat .sv.down{color:var(--loss);}
   .stat .sh{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);margin-top:5px;}
 
-  /* Section */
-  .section{margin-top:48px;}
-  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:10px;border-bottom:1px solid var(--hairline-strong);}
-  .section-head h2{font-family:"IBM Plex Serif",serif;font-weight:500;font-size:19px;margin:0;letter-spacing:-.01em;}
-  .section-head .count{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
-
-  /* Open positions */
+  .sub-head{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:34px 0 4px;}
   .pos{display:grid;grid-template-columns:80px 1fr 150px 90px;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
-  .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;}
+  .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;}
   .pos .nm{color:var(--ink-soft);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .weight{display:flex;flex-direction:column;gap:5px;}
   .weight .wlabel{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);}
@@ -66,32 +75,27 @@
   .bar i{display:block;height:100%;background:var(--ink);}
   .ret{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;}
 
-  /* Closed positions */
-  .closed-row{display:grid;grid-template-columns:80px 1fr 120px 90px 90px;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
-  .closed-row .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;letter-spacing:.02em;}
+  .closed-row{display:grid;grid-template-columns:80px 1fr 140px 90px;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
+  .closed-row .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;}
   .closed-row .nm{color:var(--ink-soft);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .closed-row .period{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);}
   .closed-row .rpct{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:15px;text-align:right;font-variant-numeric:tabular-nums;}
-  .closed-row .rkr{font-family:"IBM Plex Mono",monospace;font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft);}
-
-  .up{color:var(--gain);}
-  .down{color:var(--loss);}
+  .up{color:var(--gain);} .down{color:var(--loss);}
 
   footer.site{margin-top:60px;padding-top:18px;border-top:1px solid var(--hairline);font-size:12px;color:var(--ink-soft);line-height:1.7;}
   .empty{padding:24px 0;color:var(--ink-soft);font-size:14px;}
-
   @keyframes rise{to{opacity:1;transform:none;}}
   @media(prefers-reduced-motion:reduce){.pos,.closed-row{animation:none;opacity:1;transform:none;}}
 
   @media(max-width:640px){
-    .filter-bar{width:100%;}
-    .filter-btn{flex:1;padding:9px 8px;font-size:11px;}
+    .work-grid{grid-template-columns:1fr;}
     .stats-band{grid-template-columns:repeat(2,1fr);}
+    .filter-bar{width:100%;} .filter-btn{flex:1;}
     .pos{grid-template-columns:1fr auto;grid-template-areas:"tk ret" "nm ret" "wt wt";row-gap:6px;}
     .pos .tk{grid-area:tk;}.pos .nm{grid-area:nm;}.pos .weight{grid-area:wt;}.pos .ret{grid-area:ret;align-self:center;}
-    .closed-row{grid-template-columns:1fr auto;grid-template-areas:"tk rpct" "nm rkr" "period period";row-gap:5px;}
+    .closed-row{grid-template-columns:1fr auto;grid-template-areas:"tk rpct" "nm rpct" "period period";row-gap:5px;}
     .closed-row .tk{grid-area:tk;}.closed-row .nm{grid-area:nm;}.closed-row .period{grid-area:period;}
-    .closed-row .rpct{grid-area:rpct;align-self:center;}.closed-row .rkr{grid-area:rkr;}
+    .closed-row .rpct{grid-area:rpct;align-self:center;}
   }
 </style>
 </head>
@@ -99,76 +103,106 @@
 <div class="wrap">
 
   <header class="site">
-    <p class="eyebrow">Equity research · Personal book</p>
-    <h1 class="name" id="owner">Ludvig</h1>
-    <p class="sub">Current holdings and closed trades. Not investment advice.</p>
-    <div class="meta-row">
-      <span>Updated&nbsp;<b id="updated">—</b></span>
-      <span>Portfolio value&nbsp;<b id="portval">—</b></span>
-      <span>Open positions&nbsp;<b id="poscount">—</b></span>
-      <span>Currency&nbsp;<b id="ccy">—</b></span>
+    <p class="eyebrow">Linköping · Equity research</p>
+    <h1 class="name">Ludvig Lindman</h1>
+    <p class="bio">
+      Dual-degree student at Linköping University, reading an M.Sc. in Mechanical Engineering
+      alongside an M.Sc. in Business &amp; Economics. Equity analyst at Börsgruppen Asset Management,
+      covering Nordic small- and mid-caps, with six summers at Alfa Laval — most recently in
+      production planning. I'm interested in the seam between engineering and capital allocation:
+      how businesses actually work, and what makes them worth owning over the long run.
+    </p>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/ludviglindman" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/ludviglindman" target="_blank" rel="noopener">GitHub</a>
+      <!-- Add email later: <a href="mailto:you@example.com">Email</a> -->
     </div>
   </header>
 
-  <!-- Time filter -->
-  <div class="filter-bar" id="filter-bar">
-    <button class="filter-btn active" data-period="all">Since start</button>
-    <button class="filter-btn" data-period="ytd">YTD</button>
-  </div>
-
-  <!-- Stats band -->
-  <div class="stats-band">
-    <div class="stat">
-      <div class="sl">Closed trades</div>
-      <div class="sv" id="st-closed">—</div>
-      <div class="sh" id="st-closed-sub"></div>
-    </div>
-    <div class="stat">
-      <div class="sl">Realised P&amp;L</div>
-      <div class="sv" id="st-pnl">—</div>
-      <div class="sh" id="st-pnl-sub">gross · mixed ccy</div>
-    </div>
-    <div class="stat">
-      <div class="sl">Avg return</div>
-      <div class="sv" id="st-avg">—</div>
-      <div class="sh">per closed trade</div>
-    </div>
-    <div class="stat">
-      <div class="sl">Win rate</div>
-      <div class="sv" id="st-win">—</div>
-      <div class="sh" id="st-win-sub"></div>
-    </div>
-  </div>
-
-  <!-- Current positions (not filtered) -->
+  <!-- SELECTED WORK -->
   <section class="section">
     <div class="section-head">
-      <h2>Current positions</h2>
-      <span class="count">Unrealised return · weight</span>
+      <h2>Selected work</h2>
+      <span class="count">Equity research</span>
     </div>
-    <div id="positions"></div>
+    <p class="section-note">
+      Published research notes written at Börsgruppen Asset Management and for the Pareto
+      Equity Research Competition. These are analytical exercises, not investment advice.
+    </p>
+    <div class="work-grid">
+
+      <a class="work-card" href="./decks/qualisys.pdf" target="_blank" rel="noopener">
+        <div class="wc-top"><span class="wc-name">Qualisys</span><span class="wc-ticker">QSYS</span></div>
+        <div class="wc-ctx">BAM · May 2026</div>
+        <div class="wc-call"><b>Buy</b> · TP 73 SEK · <span class="up">+58%</span></div>
+        <div class="wc-thesis">Motion-capture niche leader. The OnTraq subscription shift should smooth earnings and drive a re-rating after an overdone post-IPO sell-off.</div>
+        <div class="wc-link">View deck →</div>
+      </a>
+
+      <a class="work-card" href="./decks/securitas.pdf" target="_blank" rel="noopener">
+        <div class="wc-top"><span class="wc-name">Securitas</span><span class="wc-ticker">SECU</span></div>
+        <div class="wc-ctx">BAM · May 2026</div>
+        <div class="wc-call"><b>Buy</b> · TP 231 SEK · <span class="up">+49%</span></div>
+        <div class="wc-thesis">With the Stanley integration done, a richer Technology &amp; Solutions mix supports faster growth, margin expansion and a premium multiple.</div>
+        <div class="wc-link">View deck →</div>
+      </a>
+
+      <a class="work-card" href="./decks/elekta.pdf" target="_blank" rel="noopener">
+        <div class="wc-top"><span class="wc-name">Elekta</span><span class="wc-ticker">EKTA B</span></div>
+        <div class="wc-ctx">Pareto Competition · Apr 2026</div>
+        <div class="wc-call"><b>Buy</b> · TP 68.9 SEK · <span class="up">+26%</span></div>
+        <div class="wc-thesis">Execution-driven underperformance with a credible self-help plan: U.S. re-acceleration on Evo, a China recovery and a gross-margin rebuild.</div>
+        <div class="wc-link">View deck →</div>
+      </a>
+
+      <a class="work-card" href="./decks/arla-plast.pdf" target="_blank" rel="noopener">
+        <div class="wc-top"><span class="wc-name">Arla Plast</span><span class="wc-ticker">ARPL</span></div>
+        <div class="wc-ctx">BAM · Jan 2026</div>
+        <div class="wc-call"><b>Buy</b> · TP 64.2 SEK · <span class="up">+28%</span></div>
+        <div class="wc-thesis">A disciplined roll-up in fragmented European extruded plastics, with EU regulatory and defence tailwinds and a market overreacting to transitory weakness.</div>
+        <div class="wc-link">View deck →</div>
+      </a>
+
+    </div>
   </section>
 
-  <!-- Closed trades (filtered) -->
+  <!-- PORTFOLIO -->
   <section class="section">
     <div class="section-head">
-      <h2>Closed positions</h2>
-      <span class="count" id="closed-count"></span>
+      <h2>Portfolio</h2>
+      <span class="count">Returns only · not advice</span>
     </div>
+
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-period="all">Since start</button>
+      <button class="filter-btn" data-period="ytd">YTD</button>
+    </div>
+
+    <div class="stats-band">
+      <div class="stat"><div class="sl" id="st-port-label">Portfolio · since start</div><div class="sv" id="st-port">—</div><div class="sh">total, incl. open</div></div>
+      <div class="stat"><div class="sl">Closed trades</div><div class="sv" id="st-closed">—</div><div class="sh" id="st-closed-sub"></div></div>
+      <div class="stat"><div class="sl">Avg return</div><div class="sv" id="st-avg">—</div><div class="sh">per closed trade</div></div>
+      <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
+    </div>
+
+    <div class="sub-head">Current positions — unrealised return · weight</div>
+    <div id="positions"></div>
+
+    <div class="sub-head">Closed positions — realised return</div>
     <div id="closed-list"></div>
   </section>
 
   <footer class="site">
-    For transparency and discussion only — nothing here is a recommendation or investment advice.
-    Figures are self-reported. Realised P&amp;L uses FIFO matching and may not match broker statements exactly.
+    Research notes are published work products of Börsgruppen Asset Management / Pareto and carry their own disclosures.
+    Portfolio figures are self-reported and shown as returns only; portfolio YTD is reported by the broker, closed-trade
+    returns use FIFO matching. Nothing here is a recommendation or investment advice.
     Built with Claude &amp; the Montrose MCP.
   </footer>
 
 </div>
 <script>
-// ── Sample data ───────────────────────────────────────────────────────────────
 const SAMPLE_POS = {
-  updated:"2026-06-14", currency:"SEK",
+  updated:"2026-06-14", currency:"SEK", ytd_return_pct:88.10, total_return_pct:163.20,
   positions:[
     {ticker:"QSYS", name:"Qualisys Holding",  return_pct:9.78,  weight_pct:57.97},
     {ticker:"NBIS", name:"Nebius Group",       return_pct:11.21, weight_pct:26.32},
@@ -177,176 +211,70 @@ const SAMPLE_POS = {
   ]
 };
 const SAMPLE_TX = {transactions:[
-  {date:"2025-03-10",ticker:"MSFT",  name:"Microsoft",   side:"buy", shares:10, price:380.00,currency:"USD"},
-  {date:"2025-06-15",ticker:"MSFT",  name:"Microsoft",   side:"sell",shares:10, price:420.00,currency:"USD"},
-  {date:"2025-09-01",ticker:"INVE B",name:"Investor B",  side:"buy", shares:100,price:240.00,currency:"SEK"},
-  {date:"2026-01-15",ticker:"INVE B",name:"Investor B",  side:"sell",shares:100,price:265.00,currency:"SEK"},
-  {date:"2026-02-01",ticker:"GOOG",  name:"Alphabet C",  side:"buy", shares:6,  price:171.30,currency:"USD"},
-  {date:"2026-04-10",ticker:"GOOG",  name:"Alphabet C",  side:"sell",shares:6,  price:152.00,currency:"USD"},
-  {date:"2026-05-01",ticker:"QSYS",  name:"Qualisys",    side:"buy", shares:200,price:48.50, currency:"SEK"},
-  {date:"2026-05-10",ticker:"NBIS",  name:"Nebius Group",side:"buy", shares:80, price:28.20, currency:"USD"},
-  {date:"2026-06-01",ticker:"MRVL",  name:"Marvell",     side:"buy", shares:30, price:91.00, currency:"USD"},
-  {date:"2026-06-05",ticker:"AVGO",  name:"Broadcom",    side:"buy", shares:4,  price:240.00,currency:"USD"}
+  {date:"2025-03-10",ticker:"MSFT",name:"Microsoft",  side:"buy", shares:10,price:380,currency:"USD"},
+  {date:"2025-06-15",ticker:"MSFT",name:"Microsoft",  side:"sell",shares:10,price:420,currency:"USD"},
+  {date:"2025-09-01",ticker:"INVE B",name:"Investor B",side:"buy",shares:100,price:240,currency:"SEK"},
+  {date:"2026-01-15",ticker:"INVE B",name:"Investor B",side:"sell",shares:100,price:265,currency:"SEK"},
+  {date:"2026-02-01",ticker:"GOOG",name:"Alphabet C", side:"buy", shares:6,price:171.3,currency:"USD"},
+  {date:"2026-04-10",ticker:"GOOG",name:"Alphabet C", side:"sell",shares:6,price:152,currency:"USD"},
+  {date:"2026-05-01",ticker:"QSYS",name:"Qualisys",   side:"buy", shares:200,price:48.5,currency:"SEK"},
+  {date:"2026-05-10",ticker:"NBIS",name:"Nebius Group",side:"buy",shares:80,price:28.2,currency:"USD"}
 ]};
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-const fmtPct = n => (n>=0?"+":"")+n.toFixed(2)+"%";
-const fmtNum = n => new Intl.NumberFormat("sv-SE",{maximumFractionDigits:2}).format(n);
-const fmtKr  = n => (n>=0?"+":"")+fmtNum(Math.round(n));
+const fmtPct=n=>(n>=0?"+":"")+n.toFixed(2)+"%";
+function cutoffDate(p){const n=new Date();if(p==="all")return null;if(p==="ytd")return new Date(n.getFullYear(),0,1).toISOString().slice(0,10);return null;}
+async function load(f,fb){try{const r=await fetch(f,{cache:"no-store"});if(!r.ok)throw 0;return await r.json();}catch{return fb;}}
 
-function cutoffDate(period){
-  const now = new Date();
-  if(period==="all") return null;
-  if(period==="ytd") return new Date(now.getFullYear(),0,1).toISOString().slice(0,10);
-  const months = period==="1y"?12:period==="6m"?6:period==="3m"?3:1;
-  const d = new Date(now);
-  d.setMonth(d.getMonth()-months);
-  return d.toISOString().slice(0,10);
+function computeClosed(tx){
+  const q={},c=[];const s=[...tx].sort((a,b)=>a.date.localeCompare(b.date));
+  for(const t of s){const k=t.ticker;if(!q[k])q[k]=[];
+    if((t.side||"").toLowerCase()==="buy"){q[k].push({date:t.date,shares:t.shares,price:t.price,name:t.name});}
+    else{let r=t.shares;while(r>0&&q[k].length){const l=q[k][0];const m=Math.min(l.shares,r);
+      const pnlPct=((t.price-l.price)/l.price)*100;
+      c.push({ticker:k,name:l.name||t.name,buyDate:l.date,sellDate:t.date,pnlPct});
+      l.shares-=m;r-=m;if(l.shares<=0)q[k].shift();}}}
+  return c;
 }
-
-async function load(file,fallback){
-  try{const r=await fetch(file,{cache:"no-store"});if(!r.ok)throw 0;return await r.json();}
-  catch{return fallback;}
+function renderStats(f){
+  const n=f.length;document.getElementById("st-closed").textContent=n||"0";
+  document.getElementById("st-closed-sub").textContent=n===1?"1 trade":n+" trades";
+  if(!n){["st-avg","st-win"].forEach(i=>{const e=document.getElementById(i);e.textContent="—";e.className="sv";});document.getElementById("st-win-sub").textContent="";return;}
+  const avg=f.reduce((s,c)=>s+c.pnlPct,0)/n,w=f.filter(c=>c.pnlPct>=0).length,wr=w/n*100;
+  let e=document.getElementById("st-avg");e.textContent=fmtPct(avg);e.className="sv "+(avg>=0?"up":"down");
+  e=document.getElementById("st-win");e.textContent=wr.toFixed(0)+"%";e.className="sv "+(wr>=50?"up":"down");
+  document.getElementById("st-win-sub").textContent=w+"W · "+(n-w)+"L";
 }
-
-// ── FIFO matching ─────────────────────────────────────────────────────────────
-function computeClosed(txList){
-  const queues={}, closed=[];
-  const sorted=[...txList].sort((a,b)=>a.date.localeCompare(b.date));
-  for(const t of sorted){
-    const tk=t.ticker;
-    if(!queues[tk]) queues[tk]=[];
-    if((t.side||"").toLowerCase()==="buy"){
-      queues[tk].push({date:t.date,shares:t.shares,price:t.price,name:t.name,currency:t.currency});
-    } else {
-      let rem=t.shares;
-      while(rem>0&&queues[tk].length){
-        const lot=queues[tk][0];
-        const matched=Math.min(lot.shares,rem);
-        const cost=matched*lot.price, proceeds=matched*t.price;
-        const pnlAbs=proceeds-cost, pnlPct=(pnlAbs/cost)*100;
-        closed.push({ticker:tk,name:lot.name||t.name,buyDate:lot.date,sellDate:t.date,
-          shares:matched,buyPrice:lot.price,sellPrice:t.price,pnlAbs,pnlPct,currency:t.currency||lot.currency});
-        lot.shares-=matched; rem-=matched;
-        if(lot.shares<=0) queues[tk].shift();
-      }
-    }
-  }
-  return closed;
+let posData={};
+function renderPortfolioReturn(period){
+  const label=document.getElementById("st-port-label");
+  const e=document.getElementById("st-port");
+  const ytd=period==="ytd";
+  label.textContent=ytd?"Portfolio · YTD":"Portfolio · since start";
+  const v=ytd?posData.ytd_return_pct:posData.total_return_pct;
+  if(v==null){e.textContent="—";e.className="sv";return;}
+  e.textContent=fmtPct(v);e.className="sv "+(v>=0?"up":"down");
 }
-
-// ── Stats ─────────────────────────────────────────────────────────────────────
-function renderStats(filtered){
-  const n=filtered.length;
-  document.getElementById("st-closed").textContent=n||"0";
-  document.getElementById("st-closed-sub").textContent=n===1?"1 trade":`${n} trades`;
-  if(!n){
-    ["st-pnl","st-avg","st-win"].forEach(id=>{
-      const el=document.getElementById(id);
-      el.textContent="—"; el.className="sv";
-    });
-    document.getElementById("st-win-sub").textContent="";
-    return;
-  }
-  const totalPnl=filtered.reduce((s,c)=>s+c.pnlAbs,0);
-  const avgPct=filtered.reduce((s,c)=>s+c.pnlPct,0)/n;
-  const winners=filtered.filter(c=>c.pnlPct>=0).length;
-  const winRate=(winners/n)*100;
-
-  const pnlEl=document.getElementById("st-pnl");
-  pnlEl.textContent=fmtKr(totalPnl);
-  pnlEl.className="sv "+(totalPnl>=0?"up":"down");
-
-  const avgEl=document.getElementById("st-avg");
-  avgEl.textContent=fmtPct(avgPct);
-  avgEl.className="sv "+(avgPct>=0?"up":"down");
-
-  const winEl=document.getElementById("st-win");
-  winEl.textContent=winRate.toFixed(0)+"%";
-  winEl.className="sv "+(winRate>=50?"up":"down");
-  document.getElementById("st-win-sub").textContent=`${winners}W · ${n-winners}L`;
-}
-
-// ── Closed list ───────────────────────────────────────────────────────────────
-function renderClosed(filtered){
+function renderClosed(f){
   const root=document.getElementById("closed-list");
-  const countEl=document.getElementById("closed-count");
-  if(!filtered.length){
-    root.innerHTML='<p class="empty">No closed positions in this period.</p>';
-    countEl.textContent="";
-    return;
-  }
-  countEl.textContent=`${filtered.length} trade${filtered.length===1?"":"s"}`;
-  const sorted=[...filtered].sort((a,b)=>b.sellDate.localeCompare(a.sellDate));
-  root.innerHTML=sorted.map((c,i)=>{
-    const up=c.pnlPct>=0;
-    return `<div class="closed-row" style="animation-delay:${i*35}ms">
-      <span class="tk">${c.ticker}</span>
-      <span class="nm">${c.name}</span>
-      <span class="period">${c.buyDate.slice(2)} → ${c.sellDate.slice(2)}</span>
-      <span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span>
-      <span class="rkr ${up?"up":"down"}">${fmtKr(c.pnlAbs)} ${c.currency||""}</span>
-    </div>`;
-  }).join("");
+  if(!f.length){root.innerHTML='<p class="empty">No closed positions in this period.</p>';return;}
+  const s=[...f].sort((a,b)=>b.sellDate.localeCompare(a.sellDate));
+  root.innerHTML=s.map((c,i)=>{const up=c.pnlPct>=0;return `<div class="closed-row" style="animation-delay:${i*35}ms"><span class="tk">${c.ticker}</span><span class="nm">${c.name}</span><span class="period">${c.buyDate.slice(2)} → ${c.sellDate.slice(2)}</span><span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span></div>`;}).join("");
 }
-
-// ── Open positions ────────────────────────────────────────────────────────────
-function renderPositions(data){
-  document.getElementById("owner").textContent  =data.owner||"Ludvig";
-  document.getElementById("updated").textContent=data.updated||"—";
-  document.getElementById("ccy").textContent    =data.currency||"—";
-  const pv = data.portfolio_value;
-  document.getElementById("portval").textContent = pv
-    ? new Intl.NumberFormat("sv-SE",{maximumFractionDigits:0}).format(pv)+" "+(data.currency||"")
-    : "—";
-  const list=(data.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
-  document.getElementById("poscount").textContent=list.length;
+function renderPositions(d){
+  const list=(d.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
   const maxW=Math.max(...list.map(p=>p.weight_pct||0),1);
   const root=document.getElementById("positions");
   if(!list.length){root.innerHTML='<p class="empty">No open positions.</p>';return;}
-  root.innerHTML=list.map((p,i)=>{
-    const up=(p.return_pct||0)>=0;
-    return `<div class="pos" style="animation-delay:${i*40}ms">
-      <span class="tk">${p.ticker||""}</span>
-      <span class="nm">${p.name||""}</span>
-      <span class="weight">
-        <span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span>
-        <span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span>
-      </span>
-      <span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span>
-    </div>`;
-  }).join("");
+  root.innerHTML=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
 }
-
-// ── Filter logic ──────────────────────────────────────────────────────────────
 let allClosed=[];
-
-function applyFilter(period){
-  const cutoff=cutoffDate(period);
-  const filtered=cutoff
-    ? allClosed.filter(c=>c.sellDate>=cutoff)
-    : allClosed;
-  renderStats(filtered);
-  renderClosed(filtered);
-}
-
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
+function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;renderStats(f);renderClosed(f);renderPortfolioReturn(p);}
 (async()=>{
-  const [posData,txData]=await Promise.all([
-    load("./positions.json",SAMPLE_POS),
-    load("./transactions.json",SAMPLE_TX)
-  ]);
-  allClosed=computeClosed(txData.transactions||[]);
-  renderPositions(posData);
-  applyFilter("all");
-
-  document.getElementById("filter-bar").addEventListener("click",e=>{
-    const btn=e.target.closest(".filter-btn");
-    if(!btn) return;
-    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    applyFilter(btn.dataset.period);
-  });
+  const [pos,tx]=await Promise.all([load("./positions.json",SAMPLE_POS),load("./transactions.json",SAMPLE_TX)]);
+  posData=pos;
+  allClosed=computeClosed(tx.transactions||[]);
+  renderPositions(pos);applyFilter("all");
+  document.getElementById("filter-bar").addEventListener("click",e=>{const b=e.target.closest(".filter-btn");if(!b)return;document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyFilter(b.dataset.period);});
 })();
 </script>
 </body>
