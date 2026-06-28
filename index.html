@@ -63,6 +63,18 @@
   .wc-link{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);margin-top:auto;padding-top:6px;}
   .work-card:hover .wc-link{color:var(--ink);}
 
+  /* Feature card (thesis) */
+  .feature{display:block;margin-top:22px;border:1px solid var(--hairline-strong);border-left:3px solid var(--ink);background:var(--paper);padding:28px 28px;text-decoration:none;color:var(--ink);transition:background .15s;}
+  .feature:hover{background:#F2F0EA;}
+  .feature .ftag{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .feature h3{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:22px;line-height:1.18;letter-spacing:-.01em;margin:10px 0 0;max-width:32ch;}
+  .feature .fauthors{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .feature .fsum{margin:14px 0 0;font-size:14.5px;color:#33363B;max-width:70ch;}
+  .feature .fmeta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
+  .feature .fmeta b{color:var(--ink);font-weight:500;}
+  .feature .flink{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-soft);margin-top:18px;}
+  .feature:hover .flink{color:var(--ink);}
+
   /* Portfolio */
   .filter-bar{display:flex;margin-top:22px;border:1px solid var(--hairline-strong);width:fit-content;}
   .filter-btn{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:9px 18px;border:none;background:transparent;color:var(--ink-soft);cursor:pointer;border-right:1px solid var(--hairline-strong);transition:background .15s,color .15s;}
@@ -98,6 +110,9 @@
   .show-all:hover{background:var(--hairline);}
 
   footer.site{margin-top:64px;padding-top:20px;border-top:1px solid var(--hairline);font-size:12px;color:var(--ink-soft);line-height:1.7;}
+  footer.site .colophon{display:block;margin-top:12px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.02em;}
+  footer.site .colophon a{color:var(--ink-soft);}
+  footer.site .colophon a:hover{color:var(--ink);}
   .empty{padding:24px 0;color:var(--ink-soft);font-size:14px;}
   @keyframes rise{to{opacity:1;transform:none;}}
   @media(prefers-reduced-motion:reduce){.pos,.closed-row{animation:none;opacity:1;transform:none;}}
@@ -124,6 +139,7 @@
     <nav class="tb-nav">
       <a href="#top">About</a>
       <a href="#work">Work</a>
+      <a href="#engineering">Engineering</a>
       <a href="#portfolio">Portfolio</a>
     </nav>
   </div>
@@ -144,7 +160,8 @@
     <div class="links">
       <a href="https://www.linkedin.com/in/ludviglindman" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="https://github.com/ludviglindman" target="_blank" rel="noopener">GitHub ↗</a>
-      <!-- Add email later: <a href="mailto:you@example.com">Email</a> -->
+      <a href="./cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+      <a href="mailto:ludvig.lindman@gmail.com">Email ↗</a>
     </div>
   </header>
 
@@ -203,10 +220,37 @@
     </div>
   </section>
 
+  <!-- ENGINEERING -->
+  <section class="section" id="engineering">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Engineering</h2>
+      <span class="count">Bachelor's thesis</span>
+    </div>
+    <a class="feature" href="./thesis.pdf" target="_blank" rel="noopener">
+      <div class="ftag">Linköping University × Broddson AB · Spring 2026 · TMMT31</div>
+      <h3>Development of a Data Logging System with MLLM-Based Event Labeling</h3>
+      <div class="fauthors">Arvid Eklund · Ludvig Lindman Lindqvist · Christian Villegas Váscos</div>
+      <p class="fsum">
+        A modular, low-cost measurement system — roughly 1,000 SEK in components — for quantifying
+        mechanical loads and vibrations in heavy mobile machinery, designed for smaller organisations
+        that lack the resources for conventional industrial rigs. Built around an embedded sensor stack
+        and field-tested on a Broddson Scandia street sweeper. A multimodal LLM was layered on top to
+        synchronise recorded sensor data with field-test video, automatically labelling mechanical
+        events to make the data interpretable without mechatronics expertise.
+      </p>
+      <div class="fmeta">
+        <span>Role&nbsp;<b>MLLM pipeline · programming · assembly</b></span>
+        <span>Build cost&nbsp;<b>~1,000 SEK</b></span>
+      </div>
+      <div class="flink">Read thesis (PDF) →</div>
+    </a>
+  </section>
+
   <!-- PORTFOLIO -->
   <section class="section" id="portfolio">
     <div class="section-head">
-      <span class="num">02</span>
+      <span class="num">03</span>
       <h2>Portfolio</h2>
       <span class="count">Returns only · not advice</span>
     </div>
@@ -235,7 +279,7 @@
     Research notes are published work products of Börsgruppen Asset Management / Pareto and carry their own disclosures.
     Portfolio figures are self-reported and shown as returns only; portfolio returns are reported by the broker, closed-trade
     returns use FIFO matching. Nothing here is a recommendation or investment advice.
-    Built with Claude &amp; the Montrose MCP.
+    <span class="colophon">Built with Claude Code · live holdings via the Montrose MCP · <a href="https://github.com/ludviglindman/ludviglindman.github.io" target="_blank" rel="noopener">source on GitHub</a>.</span>
   </footer>
 
 </div>
