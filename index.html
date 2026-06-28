@@ -4,6 +4,17 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Ludvig Lindman</title>
+<meta name="description" content="Ludvig Lindman — dual-degree student at Linköping University (mechanical engineering + business) and equity analyst at Börsgruppen Asset Management. Selected research, engineering work, and portfolio." />
+<link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ludviglindman.github.io/" />
+<meta property="og:title" content="Ludvig Lindman" />
+<meta property="og:description" content="Equity research, engineering, and portfolio. Mechanical engineering + business at Linköping University; equity analyst at Börsgruppen Asset Management." />
+<meta property="og:image" content="https://ludviglindman.github.io/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Ludvig Lindman" />
+<meta name="twitter:description" content="Equity research, engineering, and portfolio." />
+<meta name="twitter:image" content="https://ludviglindman.github.io/og.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,9 +38,12 @@
   .tb-nav{display:flex;gap:22px;}
   .tb-nav a{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;transition:color .15s;}
   .tb-nav a:hover{color:var(--ink);}
+  .tb-nav a.active{color:var(--ink);}
+  .tb-nav a.active::after{content:"";display:block;height:1px;background:var(--ink);margin-top:3px;}
 
   /* Header / bio */
-  header.hero{padding:64px 0 40px;border-bottom:2px solid var(--ink);}
+  header.hero{display:grid;grid-template-columns:1fr 220px;gap:46px;align-items:start;padding:64px 0 40px;border-bottom:2px solid var(--ink);}
+  .hero-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:1px solid var(--hairline-strong);border-radius:3px;}
   .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px;}
   h1.name{font-family:"IBM Plex Serif",serif;font-weight:600;font-size:clamp(38px,7vw,62px);line-height:1.02;margin:0;letter-spacing:-.015em;}
   .bio{margin:22px 0 0;max-width:60ch;font-size:16.5px;color:#33363B;}
@@ -120,6 +134,8 @@
   @media(max-width:640px){
     .wrap{padding:0 20px 90px;} .topbar-in{padding:12px 20px;}
     .tb-nav{gap:16px;} .tb-nav a:first-child{display:none;}
+    header.hero{grid-template-columns:1fr;gap:0;}
+    .hero-photo{order:-1;width:108px;margin-bottom:22px;}
     .work-grid{grid-template-columns:1fr;}
     .stats-band{grid-template-columns:repeat(2,1fr);}
     .filter-bar{width:100%;} .filter-btn{flex:1;}
@@ -148,14 +164,14 @@
 <div class="wrap" id="top">
 
   <header class="hero">
+    <div class="hero-text">
     <p class="eyebrow">Linköping · Equity research</p>
     <h1 class="name">Ludvig Lindman</h1>
     <p class="bio">
-      Dual-degree student at Linköping University, reading an M.Sc. in Mechanical Engineering
-      alongside an M.Sc. in Business &amp; Economics. Equity analyst at Börsgruppen Asset Management,
-      covering Nordic small- and mid-caps, with six summers at Alfa Laval — most recently in
-      production planning. I'm interested in the seam between engineering and capital allocation:
-      how businesses actually work, and what makes them worth owning over the long run.
+      Dual-degree student at Linköping University (mechanical engineering + business &amp; economics)
+      and equity analyst at Börsgruppen Asset Management, with six summers at Alfa Laval — from the
+      assembly line to production planning. I'm interested in where returns on capital come from,
+      and what makes a business worth owning for the long run.
     </p>
     <div class="links">
       <a href="https://www.linkedin.com/in/ludviglindman" target="_blank" rel="noopener">LinkedIn ↗</a>
@@ -163,6 +179,8 @@
       <a href="./cv.pdf" target="_blank" rel="noopener">CV ↗</a>
       <a href="mailto:ludvig.lindman@gmail.com">Email ↗</a>
     </div>
+    </div>
+    <div class="hero-photo"><img src="./portrait.jpg" alt="Ludvig Lindman" /></div>
   </header>
 
   <!-- SELECTED WORK -->
@@ -357,6 +375,28 @@ function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.se
   renderPositions(pos);applyFilter("all");
   document.getElementById("filter-bar").addEventListener("click",e=>{const b=e.target.closest(".filter-btn");if(!b)return;document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyFilter(b.dataset.period);});
   document.getElementById("show-all").addEventListener("click",()=>{closedExpanded=!closedExpanded;paintClosed();});
+})();
+</script>
+<script>
+(function(){
+  const linkFor={};
+  document.querySelectorAll('.tb-nav a').forEach(a=>linkFor[a.getAttribute('href').slice(1)]=a);
+  const pairs=[
+    [document.querySelector('header.hero'), linkFor['top']],
+    [document.getElementById('work'), linkFor['work']],
+    [document.getElementById('engineering'), linkFor['engineering']],
+    [document.getElementById('portfolio'), linkFor['portfolio']]
+  ].filter(p=>p[0]&&p[1]);
+  const all=pairs.map(p=>p[1]);
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const hit=pairs.find(p=>p[0]===e.target);
+        if(hit){all.forEach(a=>a.classList.remove('active'));hit[1].classList.add('active');}
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+  pairs.forEach(p=>obs.observe(p[0]));
 })();
 </script>
 </body>
