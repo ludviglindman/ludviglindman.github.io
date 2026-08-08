@@ -1,12 +1,12 @@
 {
   "owner": "Ludvig",
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
-  "updated": "2026-06-28",
+  "updated": "2026-08-08",
   "currency": "SEK",
-  "ytd_return_pct": 96.46,
-  "total_return_pct": 124.6,
+  "ytd_return_pct": 113.11,
+  "total_return_pct": 154.5,
   "positions": [
-    { "ticker": "QSYS",     "name": "Qualisys Holding",   "return_pct": 8.30,  "weight_pct": 69.75 },
-    { "ticker": "OCTV SDB", "name": "Octave Intelligence", "return_pct": -0.61, "weight_pct": 30.25 }
+    { "ticker": "EXS",  "name": "Exsitec Holding", "return_pct": 3.00, "weight_pct": 51.31 },
+    { "ticker": "SPCX", "name": "SpaceX",           "return_pct": 3.06, "weight_pct": 48.69 }
   ]
 }
