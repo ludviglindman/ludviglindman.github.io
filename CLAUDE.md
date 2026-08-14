@@ -17,11 +17,12 @@ belong on this site. My accounts are **2100477** and **2329738**. Ignore every o
 ## When I say "update portfolio" (or "uppdatera portföljen"), do this:
 
 1. **Positions** — Use the **Montrose MCP** (`get_user_accounts`, then `get_holdings` per account) to fetch
-   holdings for my accounts **2100477 and 2329738 only**. Combine them into one book. For each equity holding
-   write: ticker, company name, unrealised return (%), and `weight_pct` = its share of the INVESTED equity
-   (so the equity weights sum to ~100, cash excluded). Also compute cash: sum the currency balances
-   (`valutasaldon`) across my two accounts, convert to SEK, and write `cash_pct` = cash / (equity market value + cash) × 100.
-   Do NOT write any absolute money amounts. Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
+   holdings for my accounts **2100477 and 2329738 only**. Combine them into one book. First work out the total
+   book value = equity market value + cash (sum the currency balances / `valutasaldon` across my two accounts,
+   converted to SEK). For each equity holding write: ticker, company name, unrealised return (%), and
+   `weight_pct` = its market value as a share of the TOTAL book (so equity weights + `cash_pct` sum to ~100).
+   Write `cash_pct` = cash / total book × 100. Do NOT write any absolute money amounts.
+   Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
 
    The Montrose MCP does NOT expose portfolio returns, so I read them from the Montrose app and tell you.
    If I give you a YTD number, write it as `ytd_return_pct`; if I give you a since-start number, write it as `total_return_pct`.
@@ -54,7 +55,7 @@ Always show me the diff of the JSON files before pushing.
   "total_return_pct": 154.50,
   "cash_pct": 62,
   "positions": [
-    { "ticker": "EXS", "name": "Exsitec Holding", "return_pct": 3.00, "weight_pct": 51.31 }
+    { "ticker": "EXS", "name": "Exsitec Holding", "return_pct": 3.00, "weight_pct": 19.5 }
   ]
 }
 ```

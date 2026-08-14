@@ -103,12 +103,10 @@
   .stat .sv.up{color:var(--gain);} .stat .sv.down{color:var(--loss);}
   .stat .sh{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);margin-top:5px;}
 
-  .alloc{margin-top:28px;}
-  .alloc .albar{display:flex;height:10px;border:1px solid var(--hairline-strong);border-radius:2px;overflow:hidden;}
-  .alloc .albar .inv{background:var(--ink);}
-  .alloc .albar .csh{background:var(--hairline);}
-  .alloc .allabel{display:flex;justify-content:space-between;margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
-  .alloc .allabel b{color:var(--ink);font-weight:500;}
+  .pos.cash-row{border-top:1px solid var(--hairline-strong);}
+  .pos.cash-row .tk{color:var(--ink-soft);}
+  .pos.cash-row .bar i{background:var(--hairline-strong);}
+  .pos.cash-row .cash-ret{font-family:"IBM Plex Mono",monospace;font-size:15px;text-align:right;color:var(--ink-soft);}
   .sub-head{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:36px 0 4px;}
   .pos{display:grid;grid-template-columns:80px 1fr 150px 90px;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
   .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;}
@@ -291,9 +289,7 @@
       <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
     </div>
 
-    <div class="alloc" id="alloc"></div>
-
-    <div class="sub-head">Current positions — unrealised return · % of invested</div>
+    <div class="sub-head">Current positions — unrealised return · % of book</div>
     <div id="positions"></div>
 
     <div class="sub-head">Closed positions — realised return</div>
@@ -312,8 +308,8 @@
 <script>
 const CAP=8;
 const SAMPLE_POS={updated:"2026-08-08",currency:"SEK",ytd_return_pct:113.11,total_return_pct:154.5,cash_pct:62,positions:[
-  {ticker:"EXS",name:"Exsitec Holding",return_pct:3.00,weight_pct:51.31},
-  {ticker:"SPCX",name:"SpaceX",return_pct:3.06,weight_pct:48.69}]};
+  {ticker:"EXS",name:"Exsitec Holding",return_pct:3.00,weight_pct:19.5},
+  {ticker:"SPCX",name:"SpaceX",return_pct:3.06,weight_pct:18.5}]};
 const SAMPLE_TX={transactions:[
   {date:"2025-03-10",ticker:"MSFT",name:"Microsoft",side:"buy",shares:10,price:380,currency:"USD"},
   {date:"2025-06-15",ticker:"MSFT",name:"Microsoft",side:"sell",shares:10,price:420,currency:"USD"},
@@ -367,26 +363,25 @@ function paintClosed(){
 }
 function renderClosed(f){currentClosed=f;closedExpanded=false;paintClosed();}
 
-function renderAlloc(d){
-  const root=document.getElementById("alloc");
-  const cash=d.cash_pct;
-  if(cash==null){root.innerHTML="";return;}
-  const inv=Math.max(0,100-cash);
-  root.innerHTML=`<div class="albar"><span class="inv" style="width:${inv}%"></span><span class="csh" style="width:${cash}%"></span></div>`+
-    `<div class="allabel"><span>Invested&nbsp;<b>${inv.toFixed(0)}%</b></span><span>Cash&nbsp;<b>${cash.toFixed(0)}%</b> of book</span></div>`;
-}
 function renderPositions(d){
   const list=(d.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
-  const maxW=Math.max(...list.map(p=>p.weight_pct||0),1),root=document.getElementById("positions");
-  if(!list.length){root.innerHTML='<p class="empty">No open positions.</p>';return;}
-  root.innerHTML=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of invested</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
+  const cash=d.cash_pct;
+  const hasCash = cash!=null && cash>0;
+  const maxW=Math.max(...list.map(p=>p.weight_pct||0), hasCash?cash:0, 1);
+  const root=document.getElementById("positions");
+  if(!list.length && !hasCash){root.innerHTML='<p class="empty">No open positions.</p>';return;}
+  let html=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
+  if(hasCash){
+    html+=`<div class="pos cash-row"><span class="tk">Cash</span><span class="nm">Cash &amp; equivalents</span><span class="weight"><span class="wlabel">${cash.toFixed(1)}% of book</span><span class="bar"><i style="width:${(cash/maxW*100).toFixed(1)}%"></i></span></span><span class="cash-ret">—</span></div>`;
+  }
+  root.innerHTML=html;
 }
 let allClosed=[];
 function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;renderStats(f);renderClosed(f);renderPortfolioReturn(p);}
 (async()=>{
   const [pos,tx]=await Promise.all([load("./positions.json",SAMPLE_POS),load("./transactions.json",SAMPLE_TX)]);
   posData=pos;allClosed=computeClosed(tx.transactions||[]);
-  renderPositions(pos);renderAlloc(pos);applyFilter("all");
+  renderPositions(pos);applyFilter("all");
   document.getElementById("filter-bar").addEventListener("click",e=>{const b=e.target.closest(".filter-btn");if(!b)return;document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyFilter(b.dataset.period);});
   document.getElementById("show-all").addEventListener("click",()=>{closedExpanded=!closedExpanded;paintClosed();});
 })();
