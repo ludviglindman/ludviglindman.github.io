@@ -17,25 +17,25 @@ belong on this site. My accounts are **2100477** and **2329738**. Ignore every o
 ## When I say "update portfolio" (or "uppdatera portföljen"), do this:
 
 1. **Positions** — Use the **Montrose MCP** (`get_user_accounts`, then `get_holdings` per account) to fetch
-   holdings for my accounts **2100477 and 2329738 only**. Combine them into one book and compute each
-   holding's weight as a share of that combined book. For each holding write: ticker, company name,
-   unrealised return (%), and weight (% of book). Do NOT write any absolute money amounts.
-   Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
+   holdings for my accounts **2100477 and 2329738 only**. Combine them into one book. For each equity holding
+   write: ticker, company name, unrealised return (%), and `weight_pct` = its share of the INVESTED equity
+   (so the equity weights sum to ~100, cash excluded). Also compute cash: sum the currency balances
+   (`valutasaldon`) across my two accounts, convert to SEK, and write `cash_pct` = cash / (equity market value + cash) × 100.
+   Do NOT write any absolute money amounts. Overwrite `positions.json` in the exact schema below. Set `"updated"` to today's date.
 
    The Montrose MCP does NOT expose portfolio returns, so I read them from the Montrose app and tell you.
    If I give you a YTD number, write it as `ytd_return_pct`; if I give you a since-start number, write it as `total_return_pct`.
-   Both are percentages (e.g. 88.10). If I don't mention one, keep whatever value is already in the file.
+   Both are percentages (e.g. 113.11). If I don't mention one, keep whatever value is already in the file.
 
-2. **Transactions** — The Montrose MCP can NOT fetch trade history, so I export it manually.
-   If there is a new export file in `./imports/`, parse it and keep ONLY rows whose account (Konto)
-   is 2100477 or 2329738, and only Köp/Sälj (buy/sell) rows — skip deposits, withdrawals, interest,
-   dividends, tax, and any other account. Convert them into the schema below (shares are the absolute
-   value of Antal; buy = Köp, sell = Sälj) and merge into `transactions.json` (newest first, no
-   duplicates by date+ticker+shares). If `./imports/` is empty, leave `transactions.json` unchanged.
-
-   IMPORTANT: the shell rejects commands longer than ~965 bytes, so do NOT build the merge as one big
-   inline command. Either run the committed `merge.ps1` (`powershell -ExecutionPolicy Bypass -File .\merge.ps1`),
-   or write the merge logic to a small script file first and then execute that file.
+2. **Transactions** — Run `merge.ps1` (`powershell -ExecutionPolicy Bypass -File .\merge.ps1`). It reads the
+   newest CSV in `imports/`, keeps only my accounts (2100477 / 2329738) and only buy/sell rows, converts them
+   to the schema below, and merges into `transactions.json` (newest first, de-duplicated on
+   date+ticker+side+shares+price). If `imports/` has no new file, skip this step.
+   Use `merge.ps1` here, NOT `update.bat` — `update.bat` also commits and pushes (it's my manual double-click),
+   so running it inside this flow would double up with step 3.
+   Never rebuild the merge as one long inline command — the shell caps commands at ~965 bytes; always run it as
+   a script file. (Spec, in case `merge.ps1` must be regenerated: buy = Köp, sell = Sälj, shares = |Antal|;
+   skip deposits, withdrawals, interest, dividends, tax, and any account other than mine.)
 
 3. **Publish** — Then run: `git add -A && git commit -m "Update portfolio <date>" && git push`.
 
@@ -52,8 +52,9 @@ Always show me the diff of the JSON files before pushing.
   "currency": "SEK",
   "ytd_return_pct": 113.11,
   "total_return_pct": 154.50,
+  "cash_pct": 62,
   "positions": [
-    { "ticker": "INVE B", "name": "Investor B", "return_pct": 22.02, "weight_pct": 32.5 }
+    { "ticker": "EXS", "name": "Exsitec Holding", "return_pct": 3.00, "weight_pct": 51.31 }
   ]
 }
 ```

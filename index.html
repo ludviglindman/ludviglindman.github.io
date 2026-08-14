@@ -103,6 +103,12 @@
   .stat .sv.up{color:var(--gain);} .stat .sv.down{color:var(--loss);}
   .stat .sh{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);margin-top:5px;}
 
+  .alloc{margin-top:28px;}
+  .alloc .albar{display:flex;height:10px;border:1px solid var(--hairline-strong);border-radius:2px;overflow:hidden;}
+  .alloc .albar .inv{background:var(--ink);}
+  .alloc .albar .csh{background:var(--hairline);}
+  .alloc .allabel{display:flex;justify-content:space-between;margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);}
+  .alloc .allabel b{color:var(--ink);font-weight:500;}
   .sub-head{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:36px 0 4px;}
   .pos{display:grid;grid-template-columns:80px 1fr 150px 90px;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
   .pos .tk{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;}
@@ -285,7 +291,9 @@
       <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
     </div>
 
-    <div class="sub-head">Current positions — unrealised return · weight</div>
+    <div class="alloc" id="alloc"></div>
+
+    <div class="sub-head">Current positions — unrealised return · % of invested</div>
     <div id="positions"></div>
 
     <div class="sub-head">Closed positions — realised return</div>
@@ -303,11 +311,9 @@
 </div>
 <script>
 const CAP=8;
-const SAMPLE_POS={updated:"2026-06-14",currency:"SEK",ytd_return_pct:88.10,total_return_pct:163.20,positions:[
-  {ticker:"QSYS",name:"Qualisys Holding",return_pct:9.78,weight_pct:57.97},
-  {ticker:"NBIS",name:"Nebius Group",return_pct:11.21,weight_pct:26.32},
-  {ticker:"MRVL",name:"Marvell Technology",return_pct:4.31,weight_pct:9.74},
-  {ticker:"AVGO",name:"Broadcom",return_pct:-1.19,weight_pct:5.98}]};
+const SAMPLE_POS={updated:"2026-08-08",currency:"SEK",ytd_return_pct:113.11,total_return_pct:154.5,cash_pct:62,positions:[
+  {ticker:"EXS",name:"Exsitec Holding",return_pct:3.00,weight_pct:51.31},
+  {ticker:"SPCX",name:"SpaceX",return_pct:3.06,weight_pct:48.69}]};
 const SAMPLE_TX={transactions:[
   {date:"2025-03-10",ticker:"MSFT",name:"Microsoft",side:"buy",shares:10,price:380,currency:"USD"},
   {date:"2025-06-15",ticker:"MSFT",name:"Microsoft",side:"sell",shares:10,price:420,currency:"USD"},
@@ -361,18 +367,26 @@ function paintClosed(){
 }
 function renderClosed(f){currentClosed=f;closedExpanded=false;paintClosed();}
 
+function renderAlloc(d){
+  const root=document.getElementById("alloc");
+  const cash=d.cash_pct;
+  if(cash==null){root.innerHTML="";return;}
+  const inv=Math.max(0,100-cash);
+  root.innerHTML=`<div class="albar"><span class="inv" style="width:${inv}%"></span><span class="csh" style="width:${cash}%"></span></div>`+
+    `<div class="allabel"><span>Invested&nbsp;<b>${inv.toFixed(0)}%</b></span><span>Cash&nbsp;<b>${cash.toFixed(0)}%</b> of book</span></div>`;
+}
 function renderPositions(d){
   const list=(d.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
   const maxW=Math.max(...list.map(p=>p.weight_pct||0),1),root=document.getElementById("positions");
   if(!list.length){root.innerHTML='<p class="empty">No open positions.</p>';return;}
-  root.innerHTML=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
+  root.innerHTML=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of invested</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
 }
 let allClosed=[];
 function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;renderStats(f);renderClosed(f);renderPortfolioReturn(p);}
 (async()=>{
   const [pos,tx]=await Promise.all([load("./positions.json",SAMPLE_POS),load("./transactions.json",SAMPLE_TX)]);
   posData=pos;allClosed=computeClosed(tx.transactions||[]);
-  renderPositions(pos);applyFilter("all");
+  renderPositions(pos);renderAlloc(pos);applyFilter("all");
   document.getElementById("filter-bar").addEventListener("click",e=>{const b=e.target.closest(".filter-btn");if(!b)return;document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");applyFilter(b.dataset.period);});
   document.getElementById("show-all").addEventListener("click",()=>{closedExpanded=!closedExpanded;paintClosed();});
 })();
