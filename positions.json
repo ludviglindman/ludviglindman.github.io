@@ -1,15 +1,13 @@
 {
   "owner": "Ludvig",
   "tagline": "Current holdings and recent transactions, updated by hand. Not investment advice.",
-  "updated": "2026-08-14",
+  "updated": "2026-08-15",
   "currency": "SEK",
   "ytd_return_pct": 129.51,
   "total_return_pct": 162.4,
-  "cash_pct": 47.05,
+  "cash_pct": 77.00,
   "positions": [
-    { "ticker": "SPCX", "name": "SpaceX",             "return_pct": 9.89,  "weight_pct": 16.33 },
-    { "ticker": "EXS",  "name": "Exsitec Holding",    "return_pct": 1.11,  "weight_pct": 15.84 },
-    { "ticker": "WULF", "name": "TeraWulf",           "return_pct": -5.82, "weight_pct": 14.07 },
-    { "ticker": "CCXI", "name": "Churchill Capital XI A", "return_pct": -2.83, "weight_pct": 6.64 }
+    { "ticker": "EXS",  "name": "Exsitec Holding",        "return_pct": 2.53, "weight_pct": 16.03 },
+    { "ticker": "CCXI", "name": "Churchill Capital XI A",  "return_pct": 2.24, "weight_pct": 6.98 }
   ]
 }

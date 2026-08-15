@@ -105,7 +105,6 @@
 
   .pos.cash-row{border-top:1px solid var(--hairline-strong);}
   .pos.cash-row .tk{color:var(--ink-soft);}
-  .pos.cash-row .bar i{background:var(--hairline-strong);}
   .pos.cash-row .cash-ret{font-family:"IBM Plex Mono",monospace;font-size:15px;text-align:right;color:var(--ink-soft);}
   .sub-head{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:36px 0 4px;}
   .pos{display:grid;grid-template-columns:80px 1fr 150px 90px;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--hairline);opacity:0;transform:translateY(5px);animation:rise .4s ease forwards;}
@@ -144,7 +143,7 @@
     .stats-band{grid-template-columns:repeat(2,1fr);}
     .filter-bar{width:100%;} .filter-btn{flex:1;}
     .pos{grid-template-columns:1fr auto;grid-template-areas:"tk ret" "nm ret" "wt wt";row-gap:6px;}
-    .pos .tk{grid-area:tk;}.pos .nm{grid-area:nm;}.pos .weight{grid-area:wt;}.pos .ret{grid-area:ret;align-self:center;}
+    .pos .tk{grid-area:tk;}.pos .nm{grid-area:nm;}.pos .weight{grid-area:wt;}.pos .ret,.pos .cash-ret{grid-area:ret;align-self:center;}
     .closed-row{grid-template-columns:1fr auto;grid-template-areas:"tk rpct" "nm rpct" "period period";row-gap:5px;}
     .closed-row .tk{grid-area:tk;}.closed-row .nm{grid-area:nm;}.closed-row .period{grid-area:period;}
     .closed-row .rpct{grid-area:rpct;align-self:center;}
@@ -289,7 +288,7 @@
       <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
     </div>
 
-    <div class="sub-head">Current positions — unrealised return · % of book</div>
+    <div class="sub-head">Current positions — % of book · unrealised return</div>
     <div id="positions"></div>
 
     <div class="sub-head">Closed positions — realised return</div>
@@ -367,12 +366,11 @@ function renderPositions(d){
   const list=(d.positions||[]).slice().sort((a,b)=>(b.weight_pct||0)-(a.weight_pct||0));
   const cash=d.cash_pct;
   const hasCash = cash!=null && cash>0;
-  const maxW=Math.max(...list.map(p=>p.weight_pct||0), hasCash?cash:0, 1);
   const root=document.getElementById("positions");
   if(!list.length && !hasCash){root.innerHTML='<p class="empty">No open positions.</p>';return;}
-  let html=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span><span class="bar"><i style="width:${((p.weight_pct||0)/maxW*100).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
+  let html=list.map((p,i)=>{const up=(p.return_pct||0)>=0;return `<div class="pos" style="animation-delay:${i*40}ms"><span class="tk">${p.ticker||""}</span><span class="nm">${p.name||""}</span><span class="weight"><span class="wlabel">${(p.weight_pct||0).toFixed(1)}% of book</span><span class="bar"><i style="width:${Math.min(100,(p.weight_pct||0)).toFixed(1)}%"></i></span></span><span class="ret ${up?"up":"down"}">${fmtPct(p.return_pct||0)}</span></div>`;}).join("");
   if(hasCash){
-    html+=`<div class="pos cash-row"><span class="tk">Cash</span><span class="nm">Cash &amp; equivalents</span><span class="weight"><span class="wlabel">${cash.toFixed(1)}% of book</span><span class="bar"><i style="width:${(cash/maxW*100).toFixed(1)}%"></i></span></span><span class="cash-ret">—</span></div>`;
+    html+=`<div class="pos cash-row"><span class="tk">Cash</span><span class="nm">Cash &amp; equivalents</span><span class="weight"><span class="wlabel">${cash.toFixed(1)}% of book</span><span class="bar"><i style="width:${Math.min(100,cash).toFixed(1)}%"></i></span></span><span class="cash-ret">—</span></div>`;
   }
   root.innerHTML=html;
 }
