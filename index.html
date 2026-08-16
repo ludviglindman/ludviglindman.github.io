@@ -283,8 +283,8 @@
 
     <div class="stats-band">
       <div class="stat"><div class="sl" id="st-port-label">Portfolio · since start</div><div class="sv" id="st-port">—</div><div class="sh">total, incl. open</div></div>
-      <div class="stat"><div class="sl">Closed trades</div><div class="sv" id="st-closed">—</div><div class="sh" id="st-closed-sub"></div></div>
-      <div class="stat"><div class="sl">Avg return</div><div class="sv" id="st-avg">—</div><div class="sh">per closed trade</div></div>
+      <div class="stat"><div class="sl">Closed positions</div><div class="sv" id="st-closed">—</div><div class="sh" id="st-closed-sub"></div></div>
+      <div class="stat"><div class="sl">Avg return</div><div class="sv" id="st-avg">—</div><div class="sh">per position</div></div>
       <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
     </div>
 
@@ -324,17 +324,29 @@ function cutoffDate(p){const n=new Date();if(p==="all")return null;if(p==="ytd")
 async function load(f,fb){try{const r=await fetch(f,{cache:"no-store"});if(!r.ok)throw 0;return await r.json();}catch{return fb;}}
 
 function computeClosed(tx){
-  const q={},c=[];const s=[...tx].sort((a,b)=>a.date.localeCompare(b.date));
+  const q={},c=[];const s=[...tx].sort((a,b)=>a.date.localeCompare(b.date)||((((a.side||"").toLowerCase()==="buy")?0:1)-(((b.side||"").toLowerCase()==="buy")?0:1)));
   for(const t of s){const k=t.ticker;if(!q[k])q[k]=[];
     if((t.side||"").toLowerCase()==="buy"){q[k].push({date:t.date,shares:t.shares,price:t.price,name:t.name});}
     else{let r=t.shares;while(r>0&&q[k].length){const l=q[k][0];const m=Math.min(l.shares,r);
-      c.push({ticker:k,name:l.name||t.name,buyDate:l.date,sellDate:t.date,pnlPct:((t.price-l.price)/l.price)*100});
+      c.push({ticker:k,name:l.name||t.name,buyDate:l.date,sellDate:t.date,shares:m,buyPrice:l.price,sellPrice:t.price,pnlPct:((t.price-l.price)/l.price)*100});
       l.shares-=m;r-=m;if(l.shares<=0)q[k].shift();}}}
   return c;
 }
+function groupByCompany(lots){
+  const m={};
+  for(const l of lots){
+    let g=m[l.ticker];
+    if(!g){g={ticker:l.ticker,name:l.name,cost:0,proceeds:0,firstBuy:l.buyDate,lastSell:l.sellDate};m[l.ticker]=g;}
+    g.cost+=l.shares*l.buyPrice; g.proceeds+=l.shares*l.sellPrice;
+    if(l.buyDate<g.firstBuy)g.firstBuy=l.buyDate;
+    if(l.sellDate>g.lastSell)g.lastSell=l.sellDate;
+  }
+  return Object.values(m).map(g=>({ticker:g.ticker,name:g.name,firstBuy:g.firstBuy,lastSell:g.lastSell,
+    pnlPct:g.cost>0?((g.proceeds-g.cost)/g.cost*100):0}));
+}
 function renderStats(f){
   const n=f.length;document.getElementById("st-closed").textContent=n||"0";
-  document.getElementById("st-closed-sub").textContent=n===1?"1 trade":n+" trades";
+  document.getElementById("st-closed-sub").textContent=n===1?"1 name":n+" names";
   if(!n){["st-avg","st-win"].forEach(i=>{const e=document.getElementById(i);e.textContent="—";e.className="sv";});document.getElementById("st-win-sub").textContent="";return;}
   const avg=f.reduce((s,c)=>s+c.pnlPct,0)/n,w=f.filter(c=>c.pnlPct>=0).length,wr=w/n*100;
   let e=document.getElementById("st-avg");e.textContent=fmtPct(avg);e.className="sv "+(avg>=0?"up":"down");
@@ -354,10 +366,10 @@ let currentClosed=[],closedExpanded=false;
 function paintClosed(){
   const root=document.getElementById("closed-list"),btn=document.getElementById("show-all");
   if(!currentClosed.length){root.innerHTML='<p class="empty">No closed positions in this period.</p>';btn.style.display="none";return;}
-  const sorted=[...currentClosed].sort((a,b)=>b.sellDate.localeCompare(a.sellDate));
+  const sorted=[...currentClosed].sort((a,b)=>b.lastSell.localeCompare(a.lastSell));
   const shown=closedExpanded?sorted:sorted.slice(0,CAP);
-  root.innerHTML=shown.map(c=>{const up=c.pnlPct>=0;return `<div class="closed-row"><span class="tk">${c.ticker}</span><span class="nm">${c.name}</span><span class="period">${c.buyDate.slice(2)} → ${c.sellDate.slice(2)}</span><span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span></div>`;}).join("");
-  if(sorted.length>CAP){btn.style.display="inline-block";btn.textContent=closedExpanded?"Show fewer ↑":`Show all ${sorted.length} closed trades ↓`;}
+  root.innerHTML=shown.map(c=>{const up=c.pnlPct>=0;return `<div class="closed-row"><span class="tk">${c.ticker}</span><span class="nm">${c.name}</span><span class="period">${c.firstBuy.slice(2)} → ${c.lastSell.slice(2)}</span><span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span></div>`;}).join("");
+  if(sorted.length>CAP){btn.style.display="inline-block";btn.textContent=closedExpanded?"Show fewer ↑":`Show all ${sorted.length} closed positions ↓`;}
   else{btn.style.display="none";}
 }
 function renderClosed(f){currentClosed=f;closedExpanded=false;paintClosed();}
@@ -375,7 +387,7 @@ function renderPositions(d){
   root.innerHTML=html;
 }
 let allClosed=[];
-function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;renderStats(f);renderClosed(f);renderPortfolioReturn(p);}
+function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;const g=groupByCompany(f);renderStats(g);renderClosed(g);renderPortfolioReturn(p);}
 (async()=>{
   const [pos,tx]=await Promise.all([load("./positions.json",SAMPLE_POS),load("./transactions.json",SAMPLE_TX)]);
   posData=pos;allClosed=computeClosed(tx.transactions||[]);
