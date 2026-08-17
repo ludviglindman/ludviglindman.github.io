@@ -283,15 +283,15 @@
 
     <div class="stats-band">
       <div class="stat"><div class="sl" id="st-port-label">Portfolio · since start</div><div class="sv" id="st-port">—</div><div class="sh">total, incl. open</div></div>
-      <div class="stat"><div class="sl">Closed positions</div><div class="sv" id="st-closed">—</div><div class="sh" id="st-closed-sub"></div></div>
-      <div class="stat"><div class="sl">Avg return</div><div class="sv" id="st-avg">—</div><div class="sh">per position</div></div>
+      <div class="stat"><div class="sl">Closed trades</div><div class="sv" id="st-closed">—</div><div class="sh" id="st-closed-sub"></div></div>
+      <div class="stat"><div class="sl">Payoff ratio</div><div class="sv" id="st-pay">—</div><div class="sh" id="st-pay-sub">avg win / avg loss</div></div>
       <div class="stat"><div class="sl">Win rate</div><div class="sv" id="st-win">—</div><div class="sh" id="st-win-sub"></div></div>
     </div>
 
     <div class="sub-head">Current positions — % of book · unrealised return</div>
     <div id="positions"></div>
 
-    <div class="sub-head">Closed positions — realised return</div>
+    <div class="sub-head">Closed trades — realised return</div>
     <div id="closed-list"></div>
     <button class="show-all" id="show-all" style="display:none"></button>
   </section>
@@ -309,15 +309,7 @@ const CAP=8;
 const SAMPLE_POS={updated:"2026-08-08",currency:"SEK",ytd_return_pct:113.11,total_return_pct:154.5,cash_pct:62,positions:[
   {ticker:"EXS",name:"Exsitec Holding",return_pct:3.00,weight_pct:19.5},
   {ticker:"SPCX",name:"SpaceX",return_pct:3.06,weight_pct:18.5}]};
-const SAMPLE_TX={transactions:[
-  {date:"2025-03-10",ticker:"MSFT",name:"Microsoft",side:"buy",shares:10,price:380,currency:"USD"},
-  {date:"2025-06-15",ticker:"MSFT",name:"Microsoft",side:"sell",shares:10,price:420,currency:"USD"},
-  {date:"2025-09-01",ticker:"INVE B",name:"Investor B",side:"buy",shares:100,price:240,currency:"SEK"},
-  {date:"2026-01-15",ticker:"INVE B",name:"Investor B",side:"sell",shares:100,price:265,currency:"SEK"},
-  {date:"2026-02-01",ticker:"GOOG",name:"Alphabet C",side:"buy",shares:6,price:171.3,currency:"USD"},
-  {date:"2026-04-10",ticker:"GOOG",name:"Alphabet C",side:"sell",shares:6,price:152,currency:"USD"},
-  {date:"2026-05-01",ticker:"QSYS",name:"Qualisys",side:"buy",shares:200,price:48.5,currency:"SEK"},
-  {date:"2026-05-10",ticker:"NBIS",name:"Nebius Group",side:"buy",shares:80,price:28.2,currency:"USD"}]};
+const SAMPLE_TX={transactions:[]};
 
 const fmtPct=n=>(n>=0?"+":"")+n.toFixed(2)+"%";
 function cutoffDate(p){const n=new Date();if(p==="all")return null;if(p==="ytd")return new Date(n.getFullYear(),0,1).toISOString().slice(0,10);return null;}
@@ -332,26 +324,25 @@ function computeClosed(tx){
       l.shares-=m;r-=m;if(l.shares<=0)q[k].shift();}}}
   return c;
 }
-function groupByCompany(lots){
-  const m={};
-  for(const l of lots){
-    let g=m[l.ticker];
-    if(!g){g={ticker:l.ticker,name:l.name,cost:0,proceeds:0,firstBuy:l.buyDate,lastSell:l.sellDate};m[l.ticker]=g;}
-    g.cost+=l.shares*l.buyPrice; g.proceeds+=l.shares*l.sellPrice;
-    if(l.buyDate<g.firstBuy)g.firstBuy=l.buyDate;
-    if(l.sellDate>g.lastSell)g.lastSell=l.sellDate;
-  }
-  return Object.values(m).map(g=>({ticker:g.ticker,name:g.name,firstBuy:g.firstBuy,lastSell:g.lastSell,
-    pnlPct:g.cost>0?((g.proceeds-g.cost)/g.cost*100):0}));
-}
 function renderStats(f){
-  const n=f.length;document.getElementById("st-closed").textContent=n||"0";
-  document.getElementById("st-closed-sub").textContent=n===1?"1 name":n+" names";
-  if(!n){["st-avg","st-win"].forEach(i=>{const e=document.getElementById(i);e.textContent="—";e.className="sv";});document.getElementById("st-win-sub").textContent="";return;}
-  const avg=f.reduce((s,c)=>s+c.pnlPct,0)/n,w=f.filter(c=>c.pnlPct>=0).length,wr=w/n*100;
-  let e=document.getElementById("st-avg");e.textContent=fmtPct(avg);e.className="sv "+(avg>=0?"up":"down");
-  e=document.getElementById("st-win");e.textContent=wr.toFixed(0)+"%";e.className="sv "+(wr>=50?"up":"down");
-  document.getElementById("st-win-sub").textContent=w+"W · "+(n-w)+"L";
+  const n=f.length;
+  document.getElementById("st-closed").textContent=n||"0";
+  document.getElementById("st-closed-sub").textContent=n===1?"1 trade":n+" trades";
+  const setV=(id,txt,cls)=>{const e=document.getElementById(id);e.textContent=txt;e.className="sv"+(cls?" "+cls:"");};
+  if(!n){setV("st-pay","—");setV("st-win","—");document.getElementById("st-pay-sub").textContent="avg win / avg loss";document.getElementById("st-win-sub").textContent="";return;}
+  const wins=f.filter(c=>c.pnlPct>0), losses=f.filter(c=>c.pnlPct<0);
+  const decisive=wins.length+losses.length;
+  const avgWin=wins.length?wins.reduce((s,c)=>s+c.pnlPct,0)/wins.length:0;
+  const avgLoss=losses.length?Math.abs(losses.reduce((s,c)=>s+c.pnlPct,0)/losses.length):0;
+  // Payoff ratio = avg win % / avg loss %
+  if(losses.length===0){setV("st-pay",wins.length?"∞":"—",wins.length?"up":null);}
+  else if(wins.length===0){setV("st-pay","0.00×","down");}
+  else{const p=avgWin/avgLoss;setV("st-pay",p.toFixed(2)+"×",p>=1?"up":"down");}
+  document.getElementById("st-pay-sub").textContent=(wins.length?"+"+avgWin.toFixed(1)+"%":"—")+" / "+(losses.length?"−"+avgLoss.toFixed(1)+"%":"—");
+  // Win rate over decisive trades (breakevens excluded); shown neutral, since a low win rate is fine with a high payoff
+  const wr=decisive?wins.length/decisive*100:0;
+  setV("st-win",wr.toFixed(0)+"%");
+  document.getElementById("st-win-sub").textContent=wins.length+"W · "+losses.length+"L";
 }
 let posData={};
 function renderPortfolioReturn(period){
@@ -365,11 +356,11 @@ function renderPortfolioReturn(period){
 let currentClosed=[],closedExpanded=false;
 function paintClosed(){
   const root=document.getElementById("closed-list"),btn=document.getElementById("show-all");
-  if(!currentClosed.length){root.innerHTML='<p class="empty">No closed positions in this period.</p>';btn.style.display="none";return;}
-  const sorted=[...currentClosed].sort((a,b)=>b.lastSell.localeCompare(a.lastSell));
+  if(!currentClosed.length){root.innerHTML='<p class="empty">No closed trades in this period.</p>';btn.style.display="none";return;}
+  const sorted=[...currentClosed].sort((a,b)=>b.sellDate.localeCompare(a.sellDate));
   const shown=closedExpanded?sorted:sorted.slice(0,CAP);
-  root.innerHTML=shown.map(c=>{const up=c.pnlPct>=0;return `<div class="closed-row"><span class="tk">${c.ticker}</span><span class="nm">${c.name}</span><span class="period">${c.firstBuy.slice(2)} → ${c.lastSell.slice(2)}</span><span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span></div>`;}).join("");
-  if(sorted.length>CAP){btn.style.display="inline-block";btn.textContent=closedExpanded?"Show fewer ↑":`Show all ${sorted.length} closed positions ↓`;}
+  root.innerHTML=shown.map(c=>{const up=c.pnlPct>=0;return `<div class="closed-row"><span class="tk">${c.ticker}</span><span class="nm">${c.name}</span><span class="period">${c.buyDate.slice(2)} → ${c.sellDate.slice(2)}</span><span class="rpct ${up?"up":"down"}">${fmtPct(c.pnlPct)}</span></div>`;}).join("");
+  if(sorted.length>CAP){btn.style.display="inline-block";btn.textContent=closedExpanded?"Show fewer ↑":`Show all ${sorted.length} closed trades ↓`;}
   else{btn.style.display="none";}
 }
 function renderClosed(f){currentClosed=f;closedExpanded=false;paintClosed();}
@@ -387,7 +378,7 @@ function renderPositions(d){
   root.innerHTML=html;
 }
 let allClosed=[];
-function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;const g=groupByCompany(f);renderStats(g);renderClosed(g);renderPortfolioReturn(p);}
+function applyFilter(p){const c=cutoffDate(p);const f=c?allClosed.filter(x=>x.sellDate>=c):allClosed;renderStats(f);renderClosed(f);renderPortfolioReturn(p);}
 (async()=>{
   const [pos,tx]=await Promise.all([load("./positions.json",SAMPLE_POS),load("./transactions.json",SAMPLE_TX)]);
   posData=pos;allClosed=computeClosed(tx.transactions||[]);
